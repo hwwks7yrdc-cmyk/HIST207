@@ -2,20 +2,31 @@
 """Generates the Duplicate Sample static site.
 
 Run it from anywhere: python3 source/build_site.py
-It writes the five pages and assets/favicon.svg into the folder above this one.
+It writes the seven pages and assets/favicon.svg into the folder above this one.
 """
 import os, sys, html, shutil
+from PIL import Image
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 OUT = os.path.dirname(HERE)
+IMGDIR = os.path.join(OUT, "assets", "img")
 
 import sitedata as S
+
+
+def imgsize(name):
+    try:
+        with Image.open(os.path.join(IMGDIR, name)) as im:
+            return im.size
+    except Exception:
+        return (1400, 900)
+
 os.makedirs(OUT, exist_ok=True)
 
 NAV = [("index.html", "Entrance"), ("room-i.html", "Deposit"),
        ("room-ii.html", "Custody"), ("room-iii.html", "Thaw"),
-       ("colophon.html", "Colophon")]
+       ("register.html", "Register"), ("colophon.html", "Colophon")]
 
 
 def head(title, desc, current, tone="light", extra=""):
@@ -58,6 +69,7 @@ DEPTH = """<div class="depth" aria-hidden="true">
     <i class="depth__notch" style="top:100%"></i>
     <i class="depth__fill"></i>
   </span>
+  <span class="depth__seen" data-seen hidden><b>0</b>/18</span>
 </div>"""
 
 
@@ -204,6 +216,11 @@ def build_index():
 <section class="band--tight">
   <div class="wrap">
     <p class="kicker">The descent</p>
+    <figure class="planwrap">
+      {floorplan()}
+      <figcaption>Three chambers, nine slots. Click a slot to go straight to that work,
+      or take the rooms in order below.</figcaption>
+    </figure>
   </div>
   <div class="rooms">{rooms_html}</div>
 </section>
@@ -272,9 +289,14 @@ def work_html(w, r):
             label += (f'<div class="field"><dt>{html.escape(k)}</dt>'
                       f'<dd>{html.escape(v)}</dd></div>')
         else:
-            label += (f'<div class="field field--hidden" data-open="false">'
+            ask = ""
+            if i == 2:
+                ask = (f'<a class="field__ask" href="withdrawal.html?work={w["slug"]}">'
+                       f'Make a request &rarr;</a>')
+            label += (f'<div class="field field--hidden" data-open="false" '
+                      f'data-key="{w["slug"]}-{i}">'
                       f'<dt>{html.escape(k)} <button class="reveal" type="button">reveal</button></dt>'
-                      f'<dd class="field__v"><span>{html.escape(v)}</span></dd></div>')
+                      f'<dd class="field__v"><span>{html.escape(v)}{ask}</span></dd></div>')
 
     quote = ""
     if w.get("quote"):
@@ -290,10 +312,13 @@ def work_html(w, r):
         link = (f'<p class="work__link">The work online: '
                 f'<a href="{lu}" rel="noopener">{html.escape(lt)}</a></p>')
 
+    iw, ih = imgsize(w["img"])
+    held = " work__fig--held" if iw < 1300 else ""
+
     return f"""<article class="work" id="{w['slug']}">
-  <figure class="work__fig">
+  <figure class="work__fig{held}">
     <img src="assets/img/{w['img']}" alt="{html.escape(w['alt'])}"
-         width="1400" height="900" loading="lazy" decoding="async">
+         width="{iw}" height="{ih}" loading="lazy" decoding="async">
     <figcaption>{w['caption']}</figcaption>
   </figure>
   <div class="work__body">
@@ -363,6 +388,8 @@ def build_room(i):
   </div>
 </section>
 
+{wall(r, works) if r['n'] == "II" else ""}
+
 {''.join(work_html(w, r) for w in works)}
 
 {onward}
@@ -408,6 +435,18 @@ def build_colophon():
         <p class="muted">The site is hand-written HTML, CSS and JavaScript with no framework and no build
         step, hosted on GitHub Pages. Type is self-hosted, so the pages load without a single third-party
         request. Total weight is under two megabytes.</p>
+        <p class="muted">Four things on the site ask something of the visitor rather than only showing
+        them something. The <a href="index.html#statement">plan</a> on the entrance lets anyone enter at
+        a particular work instead of walking the rooms in order. Every label keeps two of its four fields
+        shut until they are opened, and the site counts how many of the eighteen a visitor has opened,
+        reporting it at the end. The <a href="register.html">register</a> lays all nine accessions out as
+        an inventory that can be filtered by who is permitted to withdraw, which is where the collection
+        splits into three groups of three. The <a href="withdrawal.html">withdrawal slip</a> lets a
+        visitor write a formal request for any of the material and keep it.</p>
+        <p class="muted">That last one stores nothing. Everything typed into it stays in the visitor&rsquo;s
+        own browser and is gone when the window closes. A real vault that accepts requests necessarily
+        keeps a register of everyone who asked, and that register is a form of control in its own right.
+        Declining to keep one is the only position this exhibition can take that a seed bank cannot.</p>
       </div>
       <div>
         <p class="kicker">Team</p>
@@ -494,11 +533,273 @@ FAVICON = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
 </svg>
 """
 
+# ---------------------------------------------------------------- floor plan
+def floorplan():
+    """A drawn plan of the three chambers. Each slot links to its work."""
+    W, H = 1200, 520
+    chambers = [(40, 40), (430, 160), (820, 280)]      # top-left of each room
+    cw, ch = 340, 200
+    parts = []
+
+    # corridors between chambers, drawn first so the rooms sit on top
+    for i in range(len(chambers) - 1):
+        x1 = chambers[i][0] + cw
+        y1 = chambers[i][1] + ch / 2
+        x2 = chambers[i + 1][0]
+        y2 = chambers[i + 1][1] + ch / 2
+        parts.append(f'<path class="pl-link" d="M{x1} {y1} H{(x1+x2)/2} V{y2} H{x2}"/>')
+
+    # the way in
+    parts.append(f'<path class="pl-link" d="M0 {40 + ch/2} H40"/>')
+    parts.append(f'<text class="pl-note" x="4" y="{40 + ch/2 - 14}">in</text>')
+    parts.append(f'<path class="pl-link pl-link--out" d="M{820+cw} {280+ch/2} H{W}"/>')
+    parts.append(f'<text class="pl-note" x="{W-28}" y="{280 + ch/2 - 14}">out</text>')
+
+    for r, (ox, oy) in zip(S.ROOMS, chambers):
+        works = [w for w in S.WORKS if w["room"] == r["n"]]
+        parts.append(f'<rect class="pl-room" x="{ox}" y="{oy}" width="{cw}" height="{ch}"/>')
+        parts.append(f'<text class="pl-n" x="{ox+16}" y="{oy+30}">Room {r["n"]}</text>')
+        parts.append(f'<text class="pl-name" x="{ox+16}" y="{oy+ch-16}">{r["name"]}</text>')
+        for j, w in enumerate(works):
+            sx = ox + 18 + j * 108
+            sy = oy + 50
+            surname = w["artist"].split()[-1]
+            parts.append(
+                f'<a class="pl-slot" href="{r["slug"]}.html#{w["slug"]}" '
+                f'aria-label="Room {r["n"]}, {html.escape(w["artist"])}, '
+                f'{html.escape(w["work"])}">'
+                f'<title>{html.escape(w["artist"])}, {html.escape(w["work"])}</title>'
+                f'<rect x="{sx}" y="{sy}" width="100" height="84" rx="2"/>'
+                f'<text class="pl-code" x="{sx+10}" y="{sy+24}">{w["code"].split("–")[-1].strip()}</text>'
+                f'<text class="pl-who" x="{sx+10}" y="{sy+70}">{html.escape(surname)}</text>'
+                f'</a>')
+
+    return (f'<svg class="plan" viewBox="0 0 {W} {H}" role="group" '
+            f'aria-label="Plan of the three rooms. Nine slots, each linking to a work.">'
+            + "".join(parts) + "</svg>")
+
+
+# A curatorial reading of the withdrawal field, not a string match. Three groups,
+# and the exhibition happens to split evenly across them.
+ACCESS = {
+    "orlow": "open", "sansour": "open", "futurefarmers": "open",
+    "sonjasdotter": "named", "alves": "named", "kiwanga": "named",
+    "paterson": "none", "balkin": "none", "okoyomon": "none",
+}
+ACCESS_LABEL = {"open": "Anyone may take it",
+                "named": "Only named parties",
+                "none": "No one takes anything out"}
+
+
+# ---------------------------------------------------------------- the wall
+def wall(r, works):
+    """Room II hangs its three works along one continuous wall you move across,
+    before the same three appear in full below. Native horizontal scroll with
+    snapping, so a trackpad, a wheel, a swipe and the arrow keys all work."""
+    plates = ""
+    for w in works:
+        iw, ih = imgsize(w["img"])
+        plates += f"""<a class="plate" href="#{w['slug']}">
+        <span class="plate__img"><img src="assets/img/{w['img']}"
+          alt="" width="{iw}" height="{ih}" loading="lazy" decoding="async"></span>
+        <span class="plate__cap">
+          <span class="code">{w['code']}</span>
+          <b>{html.escape(w['artist'])}</b>
+          <i>{html.escape(w['work'])}</i>
+          <em>Read the entry &darr;</em>
+        </span>
+      </a>"""
+    return f"""<section class="wall" aria-label="The wall of Room {r['n']}">
+  <div class="wall__lead">
+    <p class="kicker">The wall</p>
+    <p>Three collections hung along one wall. Move across it, then read them in order below.</p>
+    <p class="wall__hint" aria-hidden="true">scroll sideways &rarr;</p>
+  </div>
+  <div class="wall__track" tabindex="0" role="group"
+       aria-label="Three works, scrolls horizontally">{plates}</div>
+</section>"""
+
+
+# ---------------------------------------------------------------- register
+def build_register():
+    rows = ""
+    for w in S.WORKS:
+        r = next(x for x in S.ROOMS if x["n"] == w["room"])
+        withdraw = w["label"][2][1]
+        left = w["label"][3][1]
+        open_access = ACCESS[w["slug"]]
+        rows += f"""<tr data-room="{w['room']}" data-access="{open_access}">
+      <td class="reg__code"><span class="code">{w['code']}</span></td>
+      <td class="reg__who"><a href="{r['slug']}.html#{w['slug']}">{html.escape(w['artist'])}</a>
+        <span><cite>{html.escape(w['work'])}</cite>, {html.escape(w['date'])}</span></td>
+      <td class="reg__room"><span class="tag">Room {w['room']} &middot; {r['name']}</span></td>
+      <td>{html.escape(w['label'][0][1])}</td>
+      <td>{html.escape(withdraw)}
+        <span class="tag tag--{open_access}">{ACCESS_LABEL[open_access]}</span></td>
+      <td class="reg__out">{html.escape(left)}</td>
+    </tr>"""
+
+    body = f"""{DEPTH}
+<main id="main">
+<section class="band">
+  <div class="wrap">
+    <p class="kicker">The register</p>
+    <h2>Nine accessions</h2>
+    <p class="lede narrow">The same four fields that sit beside every work, laid out as the
+    inventory they imitate. Nothing is hidden here. The rooms make you open each one; this page
+    hands you all of them at once, which is a different kind of reading.</p>
+    <p class="muted narrow">Filter by who is permitted to withdraw and the nine works fall into
+    three groups of three. That split is the exhibition\u2019s actual argument, visible here in a
+    way it is not when you walk the rooms one work at a time.</p>
+
+    <div class="reg__bar">
+      <div class="chips" role="group" aria-label="Filter by room">
+        <button class="chip" data-filter="room" data-value="all" aria-pressed="true">All rooms</button>
+        <button class="chip" data-filter="room" data-value="I" aria-pressed="false">I &middot; Deposit</button>
+        <button class="chip" data-filter="room" data-value="II" aria-pressed="false">II &middot; Custody</button>
+        <button class="chip" data-filter="room" data-value="III" aria-pressed="false">III &middot; Thaw</button>
+      </div>
+      <div class="chips" role="group" aria-label="Filter by access">
+        <button class="chip" data-filter="access" data-value="all" aria-pressed="true">Any access</button>
+        <button class="chip" data-filter="access" data-value="open" aria-pressed="false">Anyone may take it</button>
+        <button class="chip" data-filter="access" data-value="named" aria-pressed="false">Only named parties</button>
+        <button class="chip" data-filter="access" data-value="none" aria-pressed="false">No one takes anything out</button>
+      </div>
+      <p class="reg__count" data-count aria-live="polite">Nine of nine</p>
+    </div>
+
+    <div class="reg__scroll">
+      <table class="reg">
+        <thead><tr>
+          <th scope="col">Accession</th><th scope="col">Artist and work</th><th scope="col">Room</th>
+          <th scope="col">What is kept</th><th scope="col">Who may withdraw it</th>
+          <th scope="col">What was left out</th>
+        </tr></thead>
+        <tbody>{rows}</tbody>
+      </table>
+    </div>
+    <p class="reg__empty" data-empty hidden>Nothing in the collection matches both filters.</p>
+
+    <div class="reg__after">
+      <p class="muted" data-progress hidden></p>
+      <p class="muted">A request for any of these can be written on the
+      <a href="withdrawal.html">withdrawal slip</a>. This site keeps no record of who asks,
+      which is the one thing a real vault would never allow.</p>
+    </div>
+  </div>
+</section>
+</main>"""
+    return head("The register \u00b7 Duplicate Sample",
+                "All nine works in the exhibition as an inventory, filterable by room and by access.",
+                "register.html") + body + foot()
+
+
+# ---------------------------------------------------------------- withdrawal
+def build_withdrawal():
+    opts = ""
+    for w in S.WORKS:
+        r = next(x for x in S.ROOMS if x["n"] == w["room"])
+        opts += (f'<option value="{w["slug"]}" data-code="{w["code"]}" '
+                 f'data-room="Room {w["room"]} &middot; {r["name"]}" '
+                 f'data-kept="{html.escape(w["label"][0][1], quote=True)}" '
+                 f'data-rule="{html.escape(w["label"][2][1], quote=True)}">'
+                 f'{w["code"]} &middot; {html.escape(w["artist"])}, '
+                 f'{html.escape(w["work"])}</option>')
+
+    body = f"""{DEPTH}
+<main id="main">
+<section class="band">
+  <div class="wrap">
+    <p class="kicker">Withdrawal</p>
+    <h2>Request material from the collection</h2>
+    <div class="cols cols--side" style="margin-top:2rem">
+      <div class="narrow">
+        <p class="lede">Every collection in this exhibition decides who may take something out.
+        This form is where you ask.</p>
+        <p class="muted">Fill it in and the slip below is written in the exhibition&rsquo;s own
+        accession format. You can print it or download it and keep it.</p>
+        <p class="muted"><b>Nothing you type is sent anywhere or stored.</b> It stays in this
+        browser window and is gone when you close it. That is deliberate. A vault that accepts
+        requests keeps a register of everyone who asked, and that register is itself a form of
+        control. This exhibition refuses to keep one, which is the one liberty a real seed bank
+        could never take.</p>
+
+        <form class="slipform" id="slipform" novalidate>
+          <p class="fieldrow">
+            <label for="f-work">Material requested</label>
+            <select id="f-work" name="work" required>{opts}</select>
+          </p>
+          <p class="fieldrow">
+            <label for="f-name">Requested by</label>
+            <input id="f-name" name="name" type="text" autocomplete="name"
+                   placeholder="Your name" required>
+          </p>
+          <p class="fieldrow">
+            <label for="f-aff">On behalf of</label>
+            <input id="f-aff" name="aff" type="text" autocomplete="organization"
+                   placeholder="An institution, a farm, a household, or nobody">
+          </p>
+          <p class="fieldrow">
+            <label for="f-why">Purpose of the withdrawal</label>
+            <textarea id="f-why" name="why" rows="4"
+              placeholder="What you intend to do with the material, and when you would return it"
+              required></textarea>
+          </p>
+          <p class="fieldrow fieldrow--check">
+            <input id="f-ack" name="ack" type="checkbox">
+            <label for="f-ack">I accept that the depositor may refuse without giving a reason.</label>
+          </p>
+          <p class="slipform__go">
+            <button class="btn" type="submit">Write the slip</button>
+            <button class="btn btn--ghost" type="reset">Clear</button>
+          </p>
+        </form>
+      </div>
+
+      <aside>
+        <article class="slip" id="slip" aria-live="polite">
+          <header class="slip__head">
+            <span class="code" data-s="code">DS &ndash; &nbsp; &ndash; &nbsp;</span>
+            <span class="slip__kind">Withdrawal request</span>
+          </header>
+          <h3 class="slip__title" data-s="title">No material selected</h3>
+          <dl class="slip__fields">
+            <div><dt>Room</dt><dd data-s="room">&mdash;</dd></div>
+            <div><dt>What is kept</dt><dd data-s="kept">&mdash;</dd></div>
+            <div><dt>Standing rule</dt><dd data-s="rule">&mdash;</dd></div>
+            <div><dt>Requested by</dt><dd data-s="name">&mdash;</dd></div>
+            <div><dt>On behalf of</dt><dd data-s="aff">&mdash;</dd></div>
+            <div><dt>Purpose</dt><dd data-s="why">&mdash;</dd></div>
+            <div><dt>Terms accepted</dt><dd data-s="ack">Not accepted</dd></div>
+            <div><dt>Raised</dt><dd data-s="when">&mdash;</dd></div>
+          </dl>
+          <footer class="slip__foot">
+            <p>Duplicate Sample &middot; an online exhibition on seed banks and the keeping of
+            living things. No record of this request is held by the exhibition.</p>
+            <p class="slip__sign"><span></span>Signature of the depositor, if ever given</p>
+          </footer>
+        </article>
+        <p class="slip__go">
+          <button class="btn" type="button" data-print disabled>Print</button>
+          <button class="btn btn--ghost" type="button" data-download disabled>Download</button>
+        </p>
+      </aside>
+    </div>
+  </div>
+</section>
+</main>"""
+    return head("Withdrawal slip \u00b7 Duplicate Sample",
+                "Request material from one of the nine collections. Nothing is stored.",
+                "withdrawal.html") + body + foot()
+
+
 if __name__ == "__main__":
     open(os.path.join(OUT, "index.html"), "w", encoding="utf-8").write(build_index())
     for i, r in enumerate(S.ROOMS):
         open(os.path.join(OUT, r["slug"] + ".html"), "w", encoding="utf-8").write(build_room(i))
     open(os.path.join(OUT, "colophon.html"), "w", encoding="utf-8").write(build_colophon())
+    open(os.path.join(OUT, "register.html"), "w", encoding="utf-8").write(build_register())
+    open(os.path.join(OUT, "withdrawal.html"), "w", encoding="utf-8").write(build_withdrawal())
     open(os.path.join(OUT, "assets", "favicon.svg"), "w", encoding="utf-8").write(FAVICON)
     open(os.path.join(OUT, ".nojekyll"), "w").write("")
     print("pages built:", sorted(f for f in os.listdir(OUT) if f.endswith(".html")))
