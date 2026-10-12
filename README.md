@@ -69,6 +69,8 @@ index.html        the entrance: title, curatorial statement, Tsing, the three ro
 room-i.html       Deposit    · Paterson, Sonjasdotter, Balkin
 room-ii.html      Custody    · Orlow, Sansour, Futurefarmers
 room-iii.html     Thaw       · Alves, Okoyomon, Kiwanga
+register.html     all nine accessions as a filterable inventory
+withdrawal.html   the request form; writes a slip, stores nothing
 colophon.html     credits, image rights, visual identity, references
 assets/style.css  the whole design system, one file
 assets/site.js    three behaviours: the label reveal, the depth marker, a page flag
@@ -105,9 +107,22 @@ assembled. They need the original source photographs and a local copy of the two
 typefaces, so they will not run as they stand on another machine. They are here
 as a record of how `assets/img/` and `assets/fonts/` were produced.
 
-**JavaScript is optional.** With it off, the two hidden label fields are shown
-open by a `<noscript>` rule and nothing is lost. Nothing on the site depends on a
-script to be readable.
+**JavaScript is optional for reading.** With it off, the two hidden label fields
+are shown open by a `<noscript>` rule, and every page stays fully readable. The
+register loses its filters but still lists all nine rows, and the wall in Room II
+still scrolls by swipe or trackpad because that is native browser behaviour, not
+script. Only the withdrawal slip needs script to do its job.
+
+**The slip stores nothing and must keep storing nothing.** Everything typed into
+`withdrawal.html` stays in the visitor's own browser. There is no endpoint, no
+third-party form service and no analytics anywhere on this site. That is a
+curatorial position, stated on the page itself, not an oversight to be fixed by
+wiring up a form handler later.
+
+**The visit record** is the one thing kept, under the key `ds.opened.v1` in
+`localStorage`: which of the eighteen closed label fields this visitor has opened.
+It never leaves their device and is read back only to show the count. Every call
+is wrapped, so a browser with storage blocked simply shows no count.
 
 **Motion respects the system setting.** Everything that animates is disabled
 under `prefers-reduced-motion: reduce`.

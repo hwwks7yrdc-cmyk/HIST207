@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Withdrawal slip · Duplicate Sample</title>
+<meta name="description" content="Request material from one of the nine collections. Nothing is stored.">
+<meta name="author" content="Tim Maurice Steiner, Qing Guo and Seble Getaneh">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Withdrawal slip · Duplicate Sample">
+<meta property="og:description" content="Request material from one of the nine collections. Nothing is stored.">
+<meta property="og:image" content="assets/design/promo.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0b1a24">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/lora-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/style.css">
+<noscript><style>.field__v{grid-template-rows:1fr!important}.reveal{display:none}</style></noscript>
+</head>
+<body data-tone="light">
+<a class="skip" href="#main">Skip to the exhibition</a>
+<header class="bar">
+  <a class="bar__mark" href="index.html">Duplicate <em>Sample</em></a>
+  <nav aria-label="Exhibition"><a href="index.html">Entrance</a><a href="room-i.html">Deposit</a><a href="room-ii.html">Custody</a><a href="room-iii.html">Thaw</a><a href="register.html">Register</a><a href="colophon.html">Colophon</a></nav>
+</header>
+<div class="depth" aria-hidden="true">
+  <span class="depth__label">depth</span>
+  <span class="depth__track">
+    <i class="depth__notch" style="top:0"></i>
+    <i class="depth__notch" style="top:50%"></i>
+    <i class="depth__notch" style="top:100%"></i>
+    <i class="depth__fill"></i>
+  </span>
+  <span class="depth__seen" data-seen hidden><b>0</b>/18</span>
+</div>
+<main id="main">
+<section class="band">
+  <div class="wrap">
+    <p class="kicker">Withdrawal</p>
+    <h2>Request material from the collection</h2>
+    <div class="cols cols--side" style="margin-top:2rem">
+      <div class="narrow">
+        <p class="lede">Every collection in this exhibition decides who may take something out.
+        This form is where you ask.</p>
+        <p class="muted">Fill it in and the slip below is written in the exhibition&rsquo;s own
+        accession format. You can print it or download it and keep it.</p>
+        <p class="muted"><b>Nothing you type is sent anywhere or stored.</b> It stays in this
+        browser window and is gone when you close it. That is deliberate. A vault that accepts
+        requests keeps a register of everyone who asked, and that register is itself a form of
+        control. This exhibition refuses to keep one, which is the one liberty a real seed bank
+        could never take.</p>
+
+        <form class="slipform" id="slipform" novalidate>
+          <p class="fieldrow">
+            <label for="f-work">Material requested</label>
+            <select id="f-work" name="work" required><option value="paterson" data-code="DS – I – 01" data-room="Room I &middot; Deposit" data-kept="One hundred manuscripts, unread, and the thousand trees that will print them." data-rule="Nobody, until 2114. The Deichman library in Oslo holds them in trust.">DS – I – 01 &middot; Katie Paterson, Future Library</option><option value="sonjasdotter" data-code="DS – I – 02" data-room="Room I &middot; Deposit" data-kept="Peasant-bred grain varieties, held in Nordic gene banks." data-rule="Researchers, and since Allkorn, farmers who ask to grow them again.">DS – I – 02 &middot; Åsa Sonjasdotter, Cultivating Abundance</option><option value="balkin" data-code="DS – I – 03" data-room="Room I &middot; Deposit" data-kept="Ordinary objects from places expected to disappear. Nothing over a kilogram." data-rule="No one withdraws. The whole archive is always shown together.">DS – I – 03 &middot; Amy Balkin, A People’s Archive of Sinking and Melting</option><option value="orlow" data-code="DS – II – 01" data-room="Room II &middot; Custody" data-kept="Names that plants carried before European botany renamed them." data-rule="Anyone, in principle. The renaming made the older names hard to find.">DS – II – 01 &middot; Uriel Orlow, Theatrum Botanicum</option><option value="sansour" data-code="DS – II – 02" data-room="Room II &middot; Custody" data-kept="About forty-seven heirloom varieties, in jars, coated in ash." data-rule="Anyone who comes to the house in Battir. No record is kept.">DS – II – 02 &middot; Vivien Sansour, Palestine Heirloom Seed Library</option><option value="futurefarmers" data-code="DS – II – 03" data-room="Room II &middot; Custody" data-kept="Seed grain, in the hold of an 1895 rescue boat." data-rule="Every port the boat reaches. The cargo is unloaded and discussed.">DS – II – 03 &middot; Futurefarmers, Seed Journey</option><option value="alves" data-code="DS – III – 01" data-room="Room III &middot; Thaw" data-kept="Seeds carried as ship ballast and tipped out in foreign harbours." data-rule="The artist, by excavating the mud and letting it germinate.">DS – III – 01 &middot; Maria Thereza Alves, Seeds of Change: A Floating Ballast Seed Garden</option><option value="okoyomon" data-code="DS – III – 02" data-room="Room III &middot; Thaw" data-kept="Living kudzu, soil and sugar cane, in a museum for the run of a show." data-rule="The plant withdraws itself. It grows over whatever is nearest.">DS – III – 02 &middot; Precious Okoyomon, Earthseed</option><option value="kiwanga" data-code="DS – III – 03" data-room="Room III &middot; Thaw" data-kept="Floral arrangements from the ceremonies at which countries became independent." data-rule="A florist in each host city, working from the archival image.">DS – III – 03 &middot; Kapwani Kiwanga, Flowers for Africa</option></select>
+          </p>
+          <p class="fieldrow">
+            <label for="f-name">Requested by</label>
+            <input id="f-name" name="name" type="text" autocomplete="name"
+                   placeholder="Your name" required>
+          </p>
+          <p class="fieldrow">
+            <label for="f-aff">On behalf of</label>
+            <input id="f-aff" name="aff" type="text" autocomplete="organization"
+                   placeholder="An institution, a farm, a household, or nobody">
+          </p>
+          <p class="fieldrow">
+            <label for="f-why">Purpose of the withdrawal</label>
+            <textarea id="f-why" name="why" rows="4"
+              placeholder="What you intend to do with the material, and when you would return it"
+              required></textarea>
+          </p>
+          <p class="fieldrow fieldrow--check">
+            <input id="f-ack" name="ack" type="checkbox">
+            <label for="f-ack">I accept that the depositor may refuse without giving a reason.</label>
+          </p>
+          <p class="slipform__go">
+            <button class="btn" type="submit">Write the slip</button>
+            <button class="btn btn--ghost" type="reset">Clear</button>
+          </p>
+        </form>
+      </div>
+
+      <aside>
+        <article class="slip" id="slip" aria-live="polite">
+          <header class="slip__head">
+            <span class="code" data-s="code">DS &ndash; &nbsp; &ndash; &nbsp;</span>
+            <span class="slip__kind">Withdrawal request</span>
+          </header>
+          <h3 class="slip__title" data-s="title">No material selected</h3>
+          <dl class="slip__fields">
+            <div><dt>Room</dt><dd data-s="room">&mdash;</dd></div>
+            <div><dt>What is kept</dt><dd data-s="kept">&mdash;</dd></div>
+            <div><dt>Standing rule</dt><dd data-s="rule">&mdash;</dd></div>
+            <div><dt>Requested by</dt><dd data-s="name">&mdash;</dd></div>
+            <div><dt>On behalf of</dt><dd data-s="aff">&mdash;</dd></div>
+            <div><dt>Purpose</dt><dd data-s="why">&mdash;</dd></div>
+            <div><dt>Terms accepted</dt><dd data-s="ack">Not accepted</dd></div>
+            <div><dt>Raised</dt><dd data-s="when">&mdash;</dd></div>
+          </dl>
+          <footer class="slip__foot">
+            <p>Duplicate Sample &middot; an online exhibition on seed banks and the keeping of
+            living things. No record of this request is held by the exhibition.</p>
+            <p class="slip__sign"><span></span>Signature of the depositor, if ever given</p>
+          </footer>
+        </article>
+        <p class="slip__go">
+          <button class="btn" type="button" data-print disabled>Print</button>
+          <button class="btn btn--ghost" type="button" data-download disabled>Download</button>
+        </p>
+      </aside>
+    </div>
+  </div>
+</section>
+</main><footer class="foot">
+  <div class="wrap">
+    <p><strong>Duplicate Sample.</strong> An online exhibition on seed banks and the keeping of living things<br>
+    Curated by Tim Maurice Steiner, Qing Guo and Seble Getaneh for ARTS / HIST 207 · History of Art and Science · Duke Kunshan University, taught by Prof. Rui Hu.</p>
+    <div class="foot__row">
+      <span>A student exhibition. All works are reproduced for coursework and credited to artist and source.</span>
+      <span><a href="colophon.html">Colophon, credits and references</a></span>
+    </div>
+  </div>
+</footer>
+<script src="assets/site.js"></script>
+</body>
+</html>

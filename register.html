@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The register · Duplicate Sample</title>
+<meta name="description" content="All nine works in the exhibition as an inventory, filterable by room and by access.">
+<meta name="author" content="Tim Maurice Steiner, Qing Guo and Seble Getaneh">
+<meta property="og:type" content="website">
+<meta property="og:title" content="The register · Duplicate Sample">
+<meta property="og:description" content="All nine works in the exhibition as an inventory, filterable by room and by access.">
+<meta property="og:image" content="assets/design/promo.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0b1a24">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/lora-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/style.css">
+<noscript><style>.field__v{grid-template-rows:1fr!important}.reveal{display:none}</style></noscript>
+</head>
+<body data-tone="light">
+<a class="skip" href="#main">Skip to the exhibition</a>
+<header class="bar">
+  <a class="bar__mark" href="index.html">Duplicate <em>Sample</em></a>
+  <nav aria-label="Exhibition"><a href="index.html">Entrance</a><a href="room-i.html">Deposit</a><a href="room-ii.html">Custody</a><a href="room-iii.html">Thaw</a><a href="register.html" aria-current="page">Register</a><a href="colophon.html">Colophon</a></nav>
+</header>
+<div class="depth" aria-hidden="true">
+  <span class="depth__label">depth</span>
+  <span class="depth__track">
+    <i class="depth__notch" style="top:0"></i>
+    <i class="depth__notch" style="top:50%"></i>
+    <i class="depth__notch" style="top:100%"></i>
+    <i class="depth__fill"></i>
+  </span>
+  <span class="depth__seen" data-seen hidden><b>0</b>/18</span>
+</div>
+<main id="main">
+<section class="band">
+  <div class="wrap">
+    <p class="kicker">The register</p>
+    <h2>Nine accessions</h2>
+    <p class="lede narrow">The same four fields that sit beside every work, laid out as the
+    inventory they imitate. Nothing is hidden here. The rooms make you open each one; this page
+    hands you all of them at once, which is a different kind of reading.</p>
+    <p class="muted narrow">Filter by who is permitted to withdraw and the nine works fall into
+    three groups of three. That split is the exhibition’s actual argument, visible here in a
+    way it is not when you walk the rooms one work at a time.</p>
+
+    <div class="reg__bar">
+      <div class="chips" role="group" aria-label="Filter by room">
+        <button class="chip" data-filter="room" data-value="all" aria-pressed="true">All rooms</button>
+        <button class="chip" data-filter="room" data-value="I" aria-pressed="false">I &middot; Deposit</button>
+        <button class="chip" data-filter="room" data-value="II" aria-pressed="false">II &middot; Custody</button>
+        <button class="chip" data-filter="room" data-value="III" aria-pressed="false">III &middot; Thaw</button>
+      </div>
+      <div class="chips" role="group" aria-label="Filter by access">
+        <button class="chip" data-filter="access" data-value="all" aria-pressed="true">Any access</button>
+        <button class="chip" data-filter="access" data-value="open" aria-pressed="false">Anyone may take it</button>
+        <button class="chip" data-filter="access" data-value="named" aria-pressed="false">Only named parties</button>
+        <button class="chip" data-filter="access" data-value="none" aria-pressed="false">No one takes anything out</button>
+      </div>
+      <p class="reg__count" data-count aria-live="polite">Nine of nine</p>
+    </div>
+
+    <div class="reg__scroll">
+      <table class="reg">
+        <thead><tr>
+          <th scope="col">Accession</th><th scope="col">Artist and work</th><th scope="col">Room</th>
+          <th scope="col">What is kept</th><th scope="col">Who may withdraw it</th>
+          <th scope="col">What was left out</th>
+        </tr></thead>
+        <tbody><tr data-room="I" data-access="none">
+      <td class="reg__code"><span class="code">DS – I – 01</span></td>
+      <td class="reg__who"><a href="room-i.html#paterson">Katie Paterson</a>
+        <span><cite>Future Library</cite>, 2014–2114</span></td>
+      <td class="reg__room"><span class="tag">Room I &middot; Deposit</span></td>
+      <td>One hundred manuscripts, unread, and the thousand trees that will print them.</td>
+      <td>Nobody, until 2114. The Deichman library in Oslo holds them in trust.
+        <span class="tag tag--none">No one takes anything out</span></td>
+      <td class="reg__out">Everything those writers wrote on the other three hundred and sixty-four days.</td>
+    </tr><tr data-room="I" data-access="named">
+      <td class="reg__code"><span class="code">DS – I – 02</span></td>
+      <td class="reg__who"><a href="room-i.html#sonjasdotter">Åsa Sonjasdotter</a>
+        <span><cite>Cultivating Abundance</cite>, 2022</span></td>
+      <td class="reg__room"><span class="tag">Room I &middot; Deposit</span></td>
+      <td>Peasant-bred grain varieties, held in Nordic gene banks.</td>
+      <td>Researchers, and since Allkorn, farmers who ask to grow them again.
+        <span class="tag tag--named">Only named parties</span></td>
+      <td class="reg__out">The fields they came from, and the practice of breeding inside them.</td>
+    </tr><tr data-room="I" data-access="none">
+      <td class="reg__code"><span class="code">DS – I – 03</span></td>
+      <td class="reg__who"><a href="room-i.html#balkin">Amy Balkin</a>
+        <span><cite>A People’s Archive of Sinking and Melting</cite>, 2012–ongoing</span></td>
+      <td class="reg__room"><span class="tag">Room I &middot; Deposit</span></td>
+      <td>Ordinary objects from places expected to disappear. Nothing over a kilogram.</td>
+      <td>No one withdraws. The whole archive is always shown together.
+        <span class="tag tag--none">No one takes anything out</span></td>
+      <td class="reg__out">Almost nothing. Two submissions were refused for misreading the brief.</td>
+    </tr><tr data-room="II" data-access="open">
+      <td class="reg__code"><span class="code">DS – II – 01</span></td>
+      <td class="reg__who"><a href="room-ii.html#orlow">Uriel Orlow</a>
+        <span><cite>Theatrum Botanicum</cite>, 2015–2018</span></td>
+      <td class="reg__room"><span class="tag">Room II &middot; Custody</span></td>
+      <td>Names that plants carried before European botany renamed them.</td>
+      <td>Anyone, in principle. The renaming made the older names hard to find.
+        <span class="tag tag--open">Anyone may take it</span></td>
+      <td class="reg__out">The Latin binomial got a herbarium sheet. The older name got none.</td>
+    </tr><tr data-room="II" data-access="open">
+      <td class="reg__code"><span class="code">DS – II – 02</span></td>
+      <td class="reg__who"><a href="room-ii.html#sansour">Vivien Sansour</a>
+        <span><cite>Palestine Heirloom Seed Library</cite>, 2014–ongoing</span></td>
+      <td class="reg__room"><span class="tag">Room II &middot; Custody</span></td>
+      <td>About forty-seven heirloom varieties, in jars, coated in ash.</td>
+      <td>Anyone who comes to the house in Battir. No record is kept.
+        <span class="tag tag--open">Anyone may take it</span></td>
+      <td class="reg__out">No accession list exists, so nothing can be audited, including loss.</td>
+    </tr><tr data-room="II" data-access="open">
+      <td class="reg__code"><span class="code">DS – II – 03</span></td>
+      <td class="reg__who"><a href="room-ii.html#futurefarmers">Futurefarmers</a>
+        <span><cite>Seed Journey</cite>, 2016–ongoing</span></td>
+      <td class="reg__room"><span class="tag">Room II &middot; Custody</span></td>
+      <td>Seed grain, in the hold of an 1895 rescue boat.</td>
+      <td>Every port the boat reaches. The cargo is unloaded and discussed.
+        <span class="tag tag--open">Anyone may take it</span></td>
+      <td class="reg__out">The fixed itinerary. The crew is allowed to change the route.</td>
+    </tr><tr data-room="III" data-access="named">
+      <td class="reg__code"><span class="code">DS – III – 01</span></td>
+      <td class="reg__who"><a href="room-iii.html#alves">Maria Thereza Alves</a>
+        <span><cite>Seeds of Change: A Floating Ballast Seed Garden</cite>, Bristol, 2012; series begun 1999</span></td>
+      <td class="reg__room"><span class="tag">Room III &middot; Thaw</span></td>
+      <td>Seeds carried as ship ballast and tipped out in foreign harbours.</td>
+      <td>The artist, by excavating the mud and letting it germinate.
+        <span class="tag tag--named">Only named parties</span></td>
+      <td class="reg__out">Any record of what the ballast held. The garden is now the record.</td>
+    </tr><tr data-room="III" data-access="none">
+      <td class="reg__code"><span class="code">DS – III – 02</span></td>
+      <td class="reg__who"><a href="room-iii.html#okoyomon">Precious Okoyomon</a>
+        <span><cite>Earthseed</cite>, MMK Frankfurt, 2020</span></td>
+      <td class="reg__room"><span class="tag">Room III &middot; Thaw</span></td>
+      <td>Living kudzu, soil and sugar cane, in a museum for the run of a show.</td>
+      <td>The plant withdraws itself. It grows over whatever is nearest.
+        <span class="tag tag--none">No one takes anything out</span></td>
+      <td class="reg__out">Any plan for what the institution does when the exhibition closes.</td>
+    </tr><tr data-room="III" data-access="named">
+      <td class="reg__code"><span class="code">DS – III – 03</span></td>
+      <td class="reg__who"><a href="room-iii.html#kiwanga">Kapwani Kiwanga</a>
+        <span><cite>Flowers for Africa</cite>, 2013–ongoing</span></td>
+      <td class="reg__room"><span class="tag">Room III &middot; Thaw</span></td>
+      <td>Floral arrangements from the ceremonies at which countries became independent.</td>
+      <td>A florist in each host city, working from the archival image.
+        <span class="tag tag--named">Only named parties</span></td>
+      <td class="reg__out">The protocol forbids maintenance. What you see depends on when you arrive.</td>
+    </tr></tbody>
+      </table>
+    </div>
+    <p class="reg__empty" data-empty hidden>Nothing in the collection matches both filters.</p>
+
+    <div class="reg__after">
+      <p class="muted" data-progress hidden></p>
+      <p class="muted">A request for any of these can be written on the
+      <a href="withdrawal.html">withdrawal slip</a>. This site keeps no record of who asks,
+      which is the one thing a real vault would never allow.</p>
+    </div>
+  </div>
+</section>
+</main><footer class="foot">
+  <div class="wrap">
+    <p><strong>Duplicate Sample.</strong> An online exhibition on seed banks and the keeping of living things<br>
+    Curated by Tim Maurice Steiner, Qing Guo and Seble Getaneh for ARTS / HIST 207 · History of Art and Science · Duke Kunshan University, taught by Prof. Rui Hu.</p>
+    <div class="foot__row">
+      <span>A student exhibition. All works are reproduced for coursework and credited to artist and source.</span>
+      <span><a href="colophon.html">Colophon, credits and references</a></span>
+    </div>
+  </div>
+</footer>
+<script src="assets/site.js"></script>
+</body>
+</html>
