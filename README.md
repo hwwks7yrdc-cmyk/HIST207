@@ -77,8 +77,10 @@ assets/site.js    three behaviours: the label reveal, the depth marker, a page f
 assets/fonts/     Lora and Poppins, subsetted to woff2, 68 KB in total
 assets/img/       work images and the designed placeholders
 assets/design/    the poster and the promotional image
-source/           sitedata.py and build_site.py, which generate the five pages,
-                  plus assets.py and fonts.py, which made the images and the fonts
+source/           sitedata.py and build_site.py, which generate the seven pages;
+                  diagrams.py, the nine drawn figures; extras.py, the spoken guide
+                  scripts and the slots for further images; assets.py and fonts.py,
+                  which made the images and the fonts
 .nojekyll         keep
 ```
 
@@ -139,3 +141,39 @@ and in its caption. Replacing one means dropping a file with the same name into
 caption in `sitedata.py`.
 
 Lora and Poppins are used under the SIL Open Font License 1.1.
+
+
+---
+
+## Three slots waiting for files
+
+The templates already handle these. Drop the file in, rebuild or not, and it appears.
+Nothing breaks while they are empty.
+
+**1. The vault photograph.** Save it as `assets/img/svalbard.jpg`, then run
+`python3 source/build_site.py`. The entrance switches from the drawn motif to the
+photograph with the title over it. Two sources are cleared for a student exhibition:
+
+- The Norwegian Ministry of Agriculture and Food's own archive, photographs by Ole
+  G. Hertzenberg, which the ministry states may be used freely as long as the
+  photographer is credited. The entrance shot is at
+  `regjeringen.no/en/topics/food-fisheries-and-agriculture/svalbard-global-seed-vault/photo/the-press-briefing-22082007/id481593`
+- NordGen's Flickr album of interior views, under Creative Commons
+  Attribution-NonCommercial, credit NordGen:
+  `flickr.com/photos/nordgen/albums/72157708987909041`
+
+Both need downloading in a normal browser. Credit the photographer in
+`sitedata.py` and in the colophon. The NonCommercial term means the site must stay
+non-commercial, which it is.
+
+**2. The spoken guide.** Nine scripts are written and already published on the work
+pages as transcripts. Record them as `assets/audio/paterson.mp3`,
+`sonjasdotter.mp3`, `balkin.mp3`, `orlow.mp3`, `sansour.mp3`, `futurefarmers.mp3`,
+`alves.mp3`, `okoyomon.mp3`, `kiwanga.mp3`. A player appears on any work whose file
+exists; the others keep the transcript alone. A phone voice memo in a quiet room is
+enough. Each runs about forty seconds.
+
+**3. Further images per work.** Add entries to `EXTRA` in `source/extras.py` as
+`("filename.jpg", "alt text", "caption with credit")` and put the file in
+`assets/img/`. A gallery appears under that work. Entries whose file is missing are
+skipped, so you can list them before you have them.
