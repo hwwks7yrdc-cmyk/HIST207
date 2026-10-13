@@ -2,7 +2,6 @@
 """Generates the Duplicate Sample static site.
 
 Run it from anywhere: python3 source/build_site.py
-It writes the seven pages and assets/favicon.svg into the folder above this one.
 """
 import os, sys, html, shutil
 from PIL import Image
@@ -14,6 +13,7 @@ IMGDIR = os.path.join(OUT, "assets", "img")
 import sitedata as S
 import diagrams as DG
 import extras as EX
+import artists as AR
 
 def imgsize(name):
     try:
@@ -673,7 +673,22 @@ def dossier(w):
       </figure>
     </section>""")
 
-    # 2. the spoken guide; the transcript is published whether or not it is recorded
+    # 2. the artist: practice, and their own words where a source could be verified
+    q = ""
+    if slug in AR.QUOTE:
+        qt, qc = AR.QUOTE[slug]
+        q = (f'<blockquote class="dos__said"><p>&ldquo;{html.escape(qt)}&rdquo;</p>'
+             f'<footer>{html.escape(qc)}</footer></blockquote>')
+    parts.append(f"""<section class="dos__item">
+      <p class="dos__k">The artist</p>
+      <div class="dos__bio">
+        <p class="dos__who">{html.escape(w["artist"])} &middot; {html.escape(w["born"])}</p>
+        <p>{html.escape(" ".join(AR.STATEMENT[slug].split()))}</p>
+        {q}
+      </div>
+    </section>""")
+
+    # 3. the spoken guide; the transcript is published whether or not it is recorded
     audio = f"audio/{slug}.mp3"
     player = (f'<audio class="dos__audio" controls preload="none" '
               f'src="assets/{audio}"></audio>'
@@ -686,7 +701,7 @@ def dossier(w):
       <blockquote class="dos__script"><p>{html.escape(EX.script(slug))}</p></blockquote>
     </section>""")
 
-    # 3. further images, only those actually present
+    # 4. further images, only those actually present
     extra = [e for e in EX.EXTRA.get(slug, []) if has_asset("img/" + e[0])]
     if extra:
         figs = ""

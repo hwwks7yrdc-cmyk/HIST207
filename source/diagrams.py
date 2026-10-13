@@ -141,8 +141,8 @@ def balkin():
     """A collection with the filter removed."""
     p = [DEFS]
     p.append(lab(60, 70, "A deposit with the selection step removed", "dg-title"))
-    p.append(lab(60, 104, "Everything offered is accepted. The whole of it is always "
-                          "shown together.", "dg-note"))
+    p.append(lab(60, 104, "Nothing is chosen at the door. The ordering happens after "
+                          "the objects have already been accepted.", "dg-note"))
     places = ["Kivalina, Alaska", "Dakar", "Nepal", "Venice", "Cuba",
               "Germany, 2013 floods", "New York, after Sandy"]
     for i, pl in enumerate(places):
@@ -161,7 +161,7 @@ def balkin():
     p.append(arrow(890, 294, 960, 294))
     p.append(lab(976, 280, "shown whole,"))
     p.append(lab(976, 302, "every object, every time"))
-    p.append(lab(976, 344, "refused: 2", "dg-lab dg-lab--dim"))
+    p.append(lab(976, 344, "refused in total: 2", "dg-lab dg-lab--dim"))
     p.append(lab(976, 366, "both for misreading the brief", "dg-lab dg-lab--dim"))
     p.append(lab(60, 492, "Every label carries the contributing country’s status under "
                           "the UN climate convention.", "dg-foot"))
@@ -352,9 +352,8 @@ def okoyomon():
                 k += 1
         if s < 3:
             p.append(arrow(ox + 236, 292, ox + 272, 292))
-    p.append(lab(60, 462, "Kudzu was introduced to the United States as an ornamental and "
-                          "then planted at scale to hold eroding soil. It did not stop there.",
-                 "dg-foot"))
+    p.append(lab(60, 462, "Kudzu was introduced to Mississippi in 1876 and planted to hold "
+                          "soil eroded by cotton. It did not stop where it was put.", "dg-foot"))
     p.append(lab(60, 492, "Okoyomon lets it grow over the room for the length of the "
                           "exhibition, and the institution agrees in advance not to cut it back.",
                  "dg-foot"))

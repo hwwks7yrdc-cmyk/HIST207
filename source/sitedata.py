@@ -85,9 +85,11 @@ dict(room="I", code="DS – I – 03", slug="balkin", img="balkin.jpg", placehol
            "2013 floods and New York after Sandy. Nothing weighs more than a kilogram. Each object is catalogued "
            "as though it were a historical artefact, and its label carries the contributing country’s status "
            "under the UN climate convention."],
-     note="A deposit with the selection step removed. The archive is not curated, everything offered is "
-          "accepted, and the whole of it is always shown. Set beside a seed vault, it asks what changes when "
-          "nobody is deciding what deserves keeping.",
+     note="A deposit with the selection step removed. Nothing is chosen: everything offered is accepted, "
+          "and the whole of it is always shown together. Balkin does organise what arrives, using the "
+          "contributing country’s status under the UN climate convention as the key, so the ordering "
+          "happens after the fact rather than at the door. Set beside a seed vault, it asks what changes "
+          "when nobody is deciding what deserves keeping.",
      label=[("What is kept", "Ordinary objects from places expected to disappear. Nothing over a kilogram."),
             ("Who deposited it", "Anyone. Individuals, consulates, passers-by in each host city."),
             ("Who may withdraw it", "No one withdraws. The whole archive is always shown together."),
