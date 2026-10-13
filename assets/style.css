@@ -584,3 +584,27 @@ blockquote.pull footer{font-family:var(--san);font-size:.72rem;letter-spacing:.0
   .hero__credit{position:absolute;right:0;bottom:0;margin:0;text-align:right;
     max-width:36rem}
 }
+
+/* ---------- gallery of further documentation ---------------------------- */
+.gal{display:grid;gap:clamp(1.2rem,3vw,2rem);grid-template-columns:1fr}
+@media (min-width:46rem){.gal{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:72rem){.gal{grid-template-columns:repeat(3,1fr)}}
+.gal__f{margin:0;display:flex;flex-direction:column}
+.gal__f img{width:100%;height:auto;background:var(--vault);
+  border:1px solid var(--rule)}
+.gal__f figcaption{font-size:.84rem;line-height:1.5;color:var(--ink-2);
+  margin-top:.7rem;padding-top:.6rem;border-top:1px solid var(--rule)}
+.gal__f cite{font-style:italic}
+
+/* sources held by the project itself */
+.dos__src{list-style:none;margin:0;padding:0;max-width:52rem}
+.dos__src li{padding:.7rem 0;border-top:1px solid var(--rule);font-size:.98rem}
+.dos__src li:first-child{border-top:0;padding-top:0}
+.dos__src a{color:var(--ink);text-decoration:none;
+  border-bottom:1px solid var(--germ);padding-bottom:1px}
+.dos__src a:hover{color:var(--germ)}
+
+/* the drawn figure is ours, so it is set apart from the documentation */
+.dos__item--ours{border-top:1px solid var(--ice)}
+.dos__item--ours .dos__k{color:var(--ice)}
+.dos__item--ours .dos__dia{border-style:dashed}
