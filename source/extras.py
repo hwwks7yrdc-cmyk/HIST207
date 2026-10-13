@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-"""The spoken guide, and slots for further images.
+"""The curators' notes, and slots for further images.
 
-AUDIO holds one short script per work, written to be read aloud in about forty
-seconds. The text is published on the page as a transcript whether or not a
-recording exists, so the content is there from the first day. Dropping
-assets/audio/<slug>.mp3 into the folder turns the player on for that work.
+AUDIO holds one short text per work, written to be read aloud in about forty
+seconds and published on the page as the curators' note for that work. The name
+of the dict is historical: the exhibition carries these as wall text, not as
+recordings.
 
 EXTRA holds further images per work: (filename, alt text, caption). A file is
 only rendered if it is actually present in assets/img/, so the team can add

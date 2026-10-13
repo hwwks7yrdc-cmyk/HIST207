@@ -166,6 +166,7 @@ def build_index():
       <span>{html.escape(S.COURSE)}</span>
     </div>
     <a class="hero__scroll" href="#statement"><span></span>Descend</a>
+    {'<p class="hero__credit">Svalbard Global Seed Vault, Spitsbergen. Photograph by Bjoertvedt, CC BY-SA 3.0, via Wikimedia Commons. The mirrored work above the entrance is <cite>Perpetual Repercussion</cite> by Dyveke Sanne.</p>' if has_asset('img/svalbard.jpg') else ''}
   </div>
 </section>
 
@@ -434,10 +435,10 @@ def build_colophon():
         is no menu inside a room.</p>
         <p class="muted">Under every work sits a dossier, so the exhibition holds its own material rather
         than sending visitors away to find it. Each one carries a diagram drawn for this show setting out
-        how that particular collection operates, and a spoken guide of about forty seconds whose
-        transcript is printed on the page whether or not the recording has been made. The artist&rsquo;s
-        own site appears at the end of the dossier as somewhere to go afterwards, not as the only way to
-        see anything.</p>
+        how that particular collection operates, a paragraph on the artist&rsquo;s practice with their own
+        words where a source could be verified, and a curators&rsquo; note written to be read aloud. The
+        artist&rsquo;s own site appears at the end of the dossier as somewhere to go afterwards, not as the
+        only way to see anything.</p>
         <p class="muted">The nine diagrams are original drawings by the curators. Every figure in them
         comes from the verified entry for that work: the twelve manuscripts deposited so far, the
         forty-seven varieties in Battir, the sixteen floral arrangements, the two refused submissions.
@@ -513,13 +514,13 @@ def build_colophon():
     <p class="muted narrow" style="margin-top:1.4rem">All works remain the property of their artists. Images
     are reproduced here for a student exhibition and are credited to artist and source on the page where they
     appear. Where no image has yet been cleared, the page carries a designed placeholder in the exhibition
-    identity rather than a borrowed photograph. The nine diagrams, the nine spoken guides, the poster and
+    identity rather than a borrowed photograph. The nine diagrams, the nine curators\u2019 notes, the poster and
     the placeholder cards were all made for this exhibition by the curators.</p>
-    <p class="muted narrow">No photograph of the Svalbard Global Seed Vault appears here yet. Two sources
-    are cleared for it. The Norwegian Ministry of Agriculture and Food publishes images by Ole G.
-    Hertzenberg which may be used freely with the photographer credited, and NordGen publishes interior
-    views under a Creative Commons Attribution-NonCommercial licence. Either suits a student exhibition.
-    Until one is added the entrance carries the drawn motif in its place.</p>
+    <p class="muted narrow">The photograph at the entrance is of the Svalbard Global Seed Vault on
+    Spitsbergen, by Bjoertvedt, published on Wikimedia Commons under a Creative Commons
+    Attribution-ShareAlike 3.0 licence. The mirrored work above the vault door is
+    <cite>Perpetual Repercussion</cite> by Dyveke Sanne, and we name it here because an exhibition about
+    who may hold what should not let an artwork pass as an architectural detail.</p>
     <dl class="facts" style="margin-top:2rem">{credits}</dl>
   </div>
 </section>
@@ -688,16 +689,9 @@ def dossier(w):
       </div>
     </section>""")
 
-    # 3. the spoken guide; the transcript is published whether or not it is recorded
-    audio = f"audio/{slug}.mp3"
-    player = (f'<audio class="dos__audio" controls preload="none" '
-              f'src="assets/{audio}"></audio>'
-              if has_asset(audio) else
-              '<p class="dos__pending">Recording to come. The text below is the '
-              'guide as written.</p>')
+    # 3. the curators' note: the wall text, written to be read aloud
     parts.append(f"""<section class="dos__item">
-      <p class="dos__k">Spoken guide <span>about forty seconds</span></p>
-      {player}
+      <p class="dos__k">Curators\u2019 note</p>
       <blockquote class="dos__script"><p>{html.escape(EX.script(slug))}</p></blockquote>
     </section>""")
 
