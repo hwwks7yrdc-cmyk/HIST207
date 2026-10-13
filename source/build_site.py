@@ -11,9 +11,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 OUT = os.path.dirname(HERE)
 IMGDIR = os.path.join(OUT, "assets", "img")
-
 import sitedata as S
-
+import diagrams as DG
+import extras as EX
 
 def imgsize(name):
     try:
@@ -154,7 +154,8 @@ def build_index():
     body = f"""{DEPTH}
 <main id="main">
 
-<section class="hero">
+<section class="hero{' hero--photo' if has_asset('img/svalbard.jpg') else ''}">
+  {anchor_image("hero")}
   {hero_svg()}
   <div class="hero__inner">
     <h1><span>Duplicate</span><span class="it">Sample</span></h1>
@@ -185,6 +186,8 @@ def build_index():
     </div>
   </div>
 </section>
+
+{preview_wall()}
 
 <section class="band dark">
   <div class="wrap">
@@ -307,10 +310,6 @@ def work_html(w, r):
 
     desc = "".join(f"<p>{html.escape(d) if '<' not in d else d}</p>" for d in w["desc"])
     link = ""
-    if w.get("link"):
-        lt, lu = w["link"]
-        link = (f'<p class="work__link">The work online: '
-                f'<a href="{lu}" rel="noopener">{html.escape(lt)}</a></p>')
 
     iw, ih = imgsize(w["img"])
     held = " work__fig--held" if iw < 1300 else ""
@@ -346,6 +345,7 @@ def work_html(w, r):
       </div>
     </div>
   </div>
+  {dossier(w)}
 </article>"""
 
 
@@ -432,6 +432,16 @@ def build_colophon():
         <p class="muted">The spatial design is the descent: three rooms passed through in order, a
         threshold panel between each, one work per screen, and a depth marker down the right edge. There
         is no menu inside a room.</p>
+        <p class="muted">Under every work sits a dossier, so the exhibition holds its own material rather
+        than sending visitors away to find it. Each one carries a diagram drawn for this show setting out
+        how that particular collection operates, and a spoken guide of about forty seconds whose
+        transcript is printed on the page whether or not the recording has been made. The artist&rsquo;s
+        own site appears at the end of the dossier as somewhere to go afterwards, not as the only way to
+        see anything.</p>
+        <p class="muted">The nine diagrams are original drawings by the curators. Every figure in them
+        comes from the verified entry for that work: the twelve manuscripts deposited so far, the
+        forty-seven varieties in Battir, the sixteen floral arrangements, the two refused submissions.
+        None of them invents a number.</p>
         <p class="muted">The site is hand-written HTML, CSS and JavaScript with no framework and no build
         step, hosted on GitHub Pages. Type is self-hosted, so the pages load without a single third-party
         request. Total weight is under two megabytes.</p>
@@ -503,7 +513,13 @@ def build_colophon():
     <p class="muted narrow" style="margin-top:1.4rem">All works remain the property of their artists. Images
     are reproduced here for a student exhibition and are credited to artist and source on the page where they
     appear. Where no image has yet been cleared, the page carries a designed placeholder in the exhibition
-    identity rather than a borrowed photograph.</p>
+    identity rather than a borrowed photograph. The nine diagrams, the nine spoken guides, the poster and
+    the placeholder cards were all made for this exhibition by the curators.</p>
+    <p class="muted narrow">No photograph of the Svalbard Global Seed Vault appears here yet. Two sources
+    are cleared for it. The Norwegian Ministry of Agriculture and Food publishes images by Ole G.
+    Hertzenberg which may be used freely with the photographer credited, and NordGen publishes interior
+    views under a Creative Commons Attribution-NonCommercial licence. Either suits a student exhibition.
+    Until one is added the entrance carries the drawn motif in its place.</p>
     <dl class="facts" style="margin-top:2rem">{credits}</dl>
   </div>
 </section>
@@ -589,6 +605,113 @@ ACCESS = {
 ACCESS_LABEL = {"open": "Anyone may take it",
                 "named": "Only named parties",
                 "none": "No one takes anything out"}
+
+
+# ---------------------------------------------------------------- preview wall
+def preview_wall():
+    """Nine tiles, one per work, so the entrance shows what is actually inside
+    before anyone commits to the descent."""
+    tiles = ""
+    for w in S.WORKS:
+        r = next(x for x in S.ROOMS if x["n"] == w["room"])
+        iw, ih = imgsize(w["img"])
+        tiles += f"""<a class="tile" href="{r['slug']}.html#{w['slug']}">
+      <img src="assets/img/{w['img']}" alt="" width="{iw}" height="{ih}"
+           loading="lazy" decoding="async">
+      <span class="tile__v">
+        <span class="code">{w['code']}</span>
+        <b>{html.escape(w['artist'])}</b>
+        <i>{html.escape(w['work'])}</i>
+      </span>
+    </a>"""
+    return f"""<section class="preview" aria-label="The nine works">
+  <div class="wrap">
+    <p class="kicker">What is inside</p>
+    <h2>Nine collections, and the rules each one runs on</h2>
+  </div>
+  <div class="tiles">{tiles}</div>
+  <div class="wrap">
+    <p class="preview__note">Four of the nine are shown here by a designed card rather
+    than a photograph, because no image has been cleared for them yet. Every page says so
+    on its face.</p>
+  </div>
+</section>"""
+
+
+# ---------------------------------------------------------------- the anchor image
+def anchor_image(kind):
+    """The vault photograph, if one has been cleared. Until then the drawn motif
+    stands in its place, and the colophon records what is missing."""
+    if has_asset("img/svalbard.jpg"):
+        iw, ih = imgsize("svalbard.jpg")
+        return (f'<img class="anchorimg" src="assets/img/svalbard.jpg" alt="The entrance '
+                f'to the Svalbard Global Seed Vault, cut into the mountainside above '
+                f'Longyearbyen." width="{iw}" height="{ih}" '
+                f'{"fetchpriority=\'high\'" if kind == "hero" else "loading=\'lazy\'"}>')
+    return ""
+
+
+# ---------------------------------------------------------------- dossier
+def has_asset(rel):
+    return os.path.isfile(os.path.join(OUT, "assets", rel))
+
+
+def dossier(w):
+    """What the exhibition holds on this work beyond the single photograph:
+    a drawn diagram, a spoken guide with its transcript, and any further
+    images that have been cleared. Rendered so that an external link is
+    somewhere to go afterwards rather than the only way to see anything."""
+    slug = w["slug"]
+    parts = []
+
+    # 1. the diagram
+    parts.append(f"""<section class="dos__item">
+      <p class="dos__k">Figure</p>
+      <figure class="dos__dia">
+        {DG.DIAGRAMS[slug]}
+        <figcaption>{DG.CAPTIONS[slug]}</figcaption>
+      </figure>
+    </section>""")
+
+    # 2. the spoken guide; the transcript is published whether or not it is recorded
+    audio = f"audio/{slug}.mp3"
+    player = (f'<audio class="dos__audio" controls preload="none" '
+              f'src="assets/{audio}"></audio>'
+              if has_asset(audio) else
+              '<p class="dos__pending">Recording to come. The text below is the '
+              'guide as written.</p>')
+    parts.append(f"""<section class="dos__item">
+      <p class="dos__k">Spoken guide <span>about forty seconds</span></p>
+      {player}
+      <blockquote class="dos__script"><p>{html.escape(EX.script(slug))}</p></blockquote>
+    </section>""")
+
+    # 3. further images, only those actually present
+    extra = [e for e in EX.EXTRA.get(slug, []) if has_asset("img/" + e[0])]
+    if extra:
+        figs = ""
+        for fn, alt, cap in extra:
+            iw, ih = imgsize(fn)
+            figs += (f'<figure><img src="assets/img/{fn}" alt="{html.escape(alt)}" '
+                     f'width="{iw}" height="{ih}" loading="lazy" decoding="async">'
+                     f'<figcaption>{cap}</figcaption></figure>')
+        parts.append(f"""<section class="dos__item">
+      <p class="dos__k">Further images</p>
+      <div class="dos__gal">{figs}</div>
+    </section>""")
+
+    link = ""
+    if w.get("link"):
+        lt, lu = w["link"]
+        link = (f'<p class="dos__away">Afterwards, the artist\u2019s own record of the work: '
+                f'<a href="{lu}" rel="noopener">{html.escape(lt)}</a></p>')
+
+    return f"""<div class="dos">
+    <div class="wrap">
+      <div class="dos__grid">{"".join(parts)}</div>
+      {link}
+    </div>
+  </div>"""
 
 
 # ---------------------------------------------------------------- the wall
