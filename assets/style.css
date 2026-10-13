@@ -457,3 +457,101 @@ blockquote.pull footer{font-family:var(--san);font-size:.72rem;letter-spacing:.0
   .plate__img img{transition:none}
   .plate:hover .plate__img img{transform:none}
 }
+
+/* ---------- the drawn diagrams ------------------------------------------ */
+.dg{width:100%;height:auto;display:block}
+.dg-box{fill:none;stroke:var(--rule);stroke-width:1.4}
+.dg-live{fill:rgba(78,140,91,.14);stroke:var(--germ);stroke-width:1.6}
+.dg-fill{fill:var(--ice);opacity:.42}
+.dg-arrow{fill:none;stroke:var(--ice);stroke-width:1.5}
+.dg-arrow--live{stroke:var(--germ);stroke-width:2}
+.dg-arrow--dash{stroke-dasharray:6 5}
+.dg-head{fill:var(--ice)}
+.dg-head--live{fill:var(--germ)}
+.dg-title{font-family:var(--ser);font-size:30px;font-weight:500;fill:var(--ink)}
+.dg-note{font-family:var(--ser);font-size:17px;fill:var(--ink-2)}
+.dg-foot{font-family:var(--ser);font-size:15px;fill:var(--ink-2)}
+.dg-lab{font-family:var(--san);font-size:14px;fill:var(--ink)}
+.dg-lab--dim{fill:var(--ice);font-size:13px}
+.dg-lab--live{fill:var(--germ)}
+.dg-lab--onlive{fill:var(--germ)}
+.dg-lab--big{font-size:17px;font-weight:500}
+.dg-brace{fill:none;stroke:var(--ice);stroke-width:1.2}
+.dg-seed{fill:var(--ice);opacity:.72}
+.dg-seed--pure{fill:var(--ink-2);opacity:.9}
+.dg-seed--buried{fill:var(--germ);opacity:.85}
+.dg-sieve{stroke:var(--ice);stroke-width:1.2}
+.dg-gateless{stroke:var(--germ);stroke-width:1.6;stroke-dasharray:3 7}
+.dg-dead{stroke:var(--ice);stroke-width:1.8}
+.dg-dead--live{stroke:var(--germ)}
+.dg-tick{fill:none;stroke:var(--ink-2);stroke-width:2.4;stroke-linecap:round;
+  stroke-linejoin:round}
+.dg-tick--live{stroke:var(--germ)}
+.dg-route{fill:none;stroke:var(--ice);stroke-width:1.8}
+.dg-port{fill:var(--paper);stroke:var(--ice);stroke-width:2}
+.dg-port--live{fill:var(--germ);stroke:var(--germ)}
+.dg-tickline{stroke:var(--rule);stroke-width:1.2}
+.dg-wave{fill:none;stroke:var(--ice);stroke-width:1.6}
+.dg-strata{fill:var(--soft);stroke:var(--rule);stroke-width:1}
+.dg-timeline{stroke:var(--rule);stroke-width:1.4}
+.dg-curve{fill:none;stroke:var(--ice);stroke-width:1.8}
+.dg-axis{stroke:var(--rule);stroke-width:1.2}
+.dg-bloom{fill:var(--germ);opacity:.8}
+.dg-bloom--gone{fill:var(--ice);opacity:.5}
+
+/* ---------- the dossier under each work --------------------------------- */
+.dos{background:var(--soft);border-top:1px solid var(--rule);
+  padding:clamp(2.6rem,7vh,4.5rem) 0}
+.dos__grid{display:grid;gap:clamp(2.2rem,5vw,3.4rem)}
+.dos__k{font-family:var(--san);font-size:.68rem;font-weight:500;letter-spacing:.17em;
+  text-transform:uppercase;color:var(--germ);margin:0 0 1rem;
+  display:flex;gap:.9rem;align-items:baseline;flex-wrap:wrap}
+.dos__k span{letter-spacing:.06em;text-transform:none;color:var(--ice);font-weight:400}
+.dos__item{border-top:1px solid var(--rule);padding-top:1.5rem}
+.dos__item:first-child{border-top:0;padding-top:0}
+.dos__dia{margin:0;background:var(--paper);border:1px solid var(--rule);
+  padding:clamp(1rem,3vw,2rem)}
+.dos__dia figcaption{font-family:var(--san);font-size:.72rem;letter-spacing:.04em;
+  color:var(--ice);margin-top:1rem;border-top:1px solid var(--rule);padding-top:.8rem}
+.dos__audio{width:100%;max-width:34rem;margin:0 0 1.2rem;display:block}
+.dos__pending{font-family:var(--san);font-size:.76rem;color:var(--ice);margin:0 0 1rem}
+.dos__script{margin:0;max-width:52rem;border-left:3px solid var(--ice);
+  padding:.1rem 0 .1rem 1.5rem}
+.dos__script p{margin:0;font-size:1.02rem;line-height:1.62;color:var(--ink-2)}
+.dos__gal{display:grid;gap:1.2rem;grid-template-columns:1fr}
+@media (min-width:52rem){.dos__gal{grid-template-columns:repeat(2,1fr)}}
+.dos__gal figure{margin:0}
+.dos__gal figcaption{font-size:.8rem;color:var(--ink-2);margin-top:.6rem}
+.dos__away{margin:2.4rem 0 0;padding-top:1.4rem;border-top:1px solid var(--rule);
+  font-size:.92rem;color:var(--ink-2)}
+.dos__away a{color:var(--germ)}
+@media (min-width:68rem){
+  .dos__grid{grid-template-columns:1fr}
+}
+
+/* ---------- the preview wall -------------------------------------------- */
+.preview{background:var(--vault);color:var(--frost);
+  padding:clamp(3.4rem,9vh,6rem) 0 clamp(2.6rem,7vh,4rem)}
+.preview h2{font-size:clamp(1.7rem,1.3rem + 1.5vw,2.7rem);margin:0 0 clamp(2rem,5vh,3rem);
+  max-width:24ch}
+.preview .kicker{color:var(--germ-lift)}
+.preview__note{margin:clamp(1.6rem,4vh,2.4rem) 0 0;font-size:.88rem;color:#8ba0ad;
+  max-width:46rem}
+.tiles{display:grid;gap:2px;grid-template-columns:repeat(2,1fr);background:var(--dim)}
+@media (min-width:46rem){.tiles{grid-template-columns:repeat(3,1fr)}}
+.tile{position:relative;display:block;overflow:hidden;background:#09141c;
+  text-decoration:none;color:var(--frost);aspect-ratio:3/2}
+.tile img{width:100%;height:100%;object-fit:cover;opacity:.66;
+  transition:opacity .4s var(--ease),transform .7s var(--ease)}
+.tile:hover img,.tile:focus-visible img{opacity:.88;transform:scale(1.05)}
+.tile__v{position:absolute;inset:auto 0 0 0;padding:2.6rem clamp(.8rem,2vw,1.2rem) clamp(.8rem,2vw,1.2rem);
+  background:linear-gradient(to top,rgba(11,26,36,.97) 0%,rgba(11,26,36,.86) 42%,rgba(11,26,36,0) 100%)}
+.tile__v .code{display:block;font-size:.64rem;color:var(--germ-lift)}
+.tile__v b{display:block;font-family:var(--ser);font-size:clamp(.95rem,.85rem + .4vw,1.2rem);
+  font-weight:500;margin-top:.25rem;line-height:1.2}
+.tile__v i{display:block;font-size:.78rem;color:#9fb0bc;margin-top:.1rem;line-height:1.3}
+
+/* ---------- the vault photograph, once one is cleared -------------------- */
+.anchorimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:.5;z-index:0}
+.hero--photo .hero__grid{opacity:.35}
