@@ -107,17 +107,128 @@ was ever promising.
 """,
 }
 
-# (filename in assets/img/, alt text, caption). Rendered only if the file exists.
+# (filename in assets/img/, alt text, caption with its own credit).
+# Rendered only if the file is actually present. Everything here is documentation
+# of the work itself, from the artist's own site, their distributor, or the
+# institution that showed it. Nothing in this list was drawn or generated.
 EXTRA = {
-    "paterson": [],
-    "sonjasdotter": [],
-    "balkin": [],
-    "orlow": [],
-    "sansour": [],
-    "futurefarmers": [],
-    "alves": [],
-    "okoyomon": [],
-    "kiwanga": [],
+"paterson": [
+  ("paterson-2.jpg",
+   "Two people signing a document on a cardboard box in the forest clearing.",
+   "The handover. Each year’s manuscript is signed over in Nordmarka and sealed. "
+   "From the artist’s own documentation, futurelibrary.no."),
+  ("paterson-3.jpg",
+   "A printed certificate reading Margaret Atwood, 2014, Framtidsbiblioteket, Future Library, Katie Paterson.",
+   "The certificate issued for the first deposit, Margaret Atwood, 2014. The accession "
+   "document for a text nobody may read. futurelibrary.no."),
+  ("paterson-4.jpg",
+   "A line of people walking a forest path among tall spruce.",
+   "The yearly walk into Nordmarka for the handover ceremony. futurelibrary.no."),
+],
+"sonjasdotter": [
+  ("sonjasdotter-2.jpg",
+   "Black and white archival footage of a field sign reading Svalofs Original Diamantvarvete II.",
+   "Archival footage used in the film: a Svalöf trial plot sign, Diamantvårvete II. "
+   "The naming and numbering of a certified variety. Still from the film, Filmform."),
+  ("sonjasdotter-3.jpg",
+   "Hands holding a flat glass case of grain over a stack of papers and folders.",
+   "A gene bank accession handled in the film. Still from <cite>Cultivating Abundance</cite>, "
+   "Filmform."),
+  ("sonjasdotter-4.jpg",
+   "A group of people standing together in a ripe grain field at the edge of a wood.",
+   "Allkorn growers in the field. Still from <cite>Cultivating Abundance</cite>, Filmform."),
+],
+"balkin": [
+  ("balkin-2.jpg",
+   "Four contributed objects photographed separately: a coral fragment, a stone, a shell and an Antarctica patch.",
+   "Four contributions, catalogued individually as a museum would catalogue them. "
+   "Southern Exposure, San Francisco."),
+  ("balkin-3.jpg",
+   "A cotton tote bag printed Nepal Tourism Board, Naturally Nepal.",
+   "A contribution from Nepal. Nothing in the archive weighs more than a kilogram. "
+   "Southern Exposure, San Francisco."),
+],
+"orlow": [
+  ("orlow-2.jpg",
+   "Two people carrying a jute sack through dense green hillside vegetation.",
+   "Still from <cite>Muthi</cite>, single-channel HD video with sound, 11 minutes 23 seconds, "
+   "2016, part of <cite>Theatrum Botanicum</cite>. urielorlow.net."),
+  ("orlow-3.jpg",
+   "A gallery with a wall of framed panels, a large photographic portrait and a visitor on a bench.",
+   "<cite>Theatrum Botanicum</cite> installed at Kunst Halle Sankt Gallen. "
+   "Photograph by Gunnar Meier, urielorlow.net."),
+  ("orlow-4.jpg",
+   "A domed rotunda with a circular wooden rail and small objects spaced along the walls.",
+   "A further installation of the work, in Durban. urielorlow.net."),
+],
+"sansour": [
+  ("sansour-2.jpg",
+   "Printed seed packets in Arabic and English reading Abu Samara, Spinach Sabanikh, Chard, Palestine Heirloom Seed Library.",
+   "Seed packets from the library, named in Arabic and English. A Field, afield.org."),
+  ("sansour-3.jpg",
+   "Two women sitting on the floor sorting grain in a wide bowl, taking notes.",
+   "Sansour recording a grower’s knowledge of a variety. Photograph by Vivien Sansour, "
+   "A Field, afield.org."),
+],
+"futurefarmers": [
+  ("futurefarmers-2.jpg",
+   "A crowd pressing around a trestle table covered in small jars of grain in a city street.",
+   "The cargo unloaded in port and handed over. From the Seed Journey logbook, "
+   "futurefarmers.com."),
+  ("futurefarmers-3.jpg",
+   "A black and white photograph of two bearded men each holding a large sheaf of grain.",
+   "Archival photograph gathered during the voyage. From the Seed Journey logbook, "
+   "futurefarmers.com."),
+  ("futurefarmers-4.jpg",
+   "A walled garden with woven hurdle fencing beside a stone farm building.",
+   "A growing ground visited on the route. From the Seed Journey logbook, futurefarmers.com."),
+],
+"alves": [
+  ("alves-2.jpg",
+   "A long gallery wall of framed research panels, maps and photographs.",
+   "<cite>Seeds of Change</cite> installed as research panels, maps and photographs. "
+   "mariatherezaalves.org."),
+  ("alves-3.jpg",
+   "The worn cover of a bound volume reading Catalogue of the Herbarium Collection of the late Mr Robert Brown.",
+   "An archival herbarium catalogue consulted for the work. The ballast record is read "
+   "against the botanical record. mariatherezaalves.org."),
+  ("alves-4.jpg",
+   "A pressed plant specimen labelled Alcea rhombifolia mounted beside a page of typed text.",
+   "A ballast species, named and set beside its history. mariatherezaalves.org."),
+  ("alves-5.jpg",
+   "A tall framed panel holding two photographs of spoil heaps and dockside ground with a text between them.",
+   "Ballast ground, photographed and annotated. mariatherezaalves.org."),
+],
+"okoyomon": [
+  ("okoyomon-2.jpg",
+   "A stand of trees completely buried under a continuous blanket of kudzu vine.",
+   "Not the installation. This is kudzu doing in Georgia what it does in the gallery: "
+   "growing over whatever is nearest. Wikimedia Commons."),
+],
+"kiwanga": [],
+}
+
+# Film and sound held by the projects themselves, linked rather than embedded so
+# the pages keep working where those platforms are blocked.
+SOURCE_MEDIA = {
+"sonjasdotter": [("An excerpt from the 64-minute film, published by Filmform",
+                  "https://www.filmform.com/works/5840-cultivating-abundance")],
+"orlow": [("The films of Theatrum Botanicum on the artist’s site",
+           "https://urielorlow.net/project/theatrum-botanicum/")],
+"futurefarmers": [("The full voyage logbook, port by port",
+                   "https://www.futurefarmers.com/seedjourney")],
+"paterson": [("The handover ceremonies and author certificates, year by year",
+              "https://www.futurelibrary.no/")],
+"alves": [("The full image archive of the project",
+           "https://www.mariatherezaalves.org/works/seeds-of-change")],
+"balkin": [("The archive’s own catalogue of contributions",
+            "https://archiveofsinkingandmelting.org/")],
+"sansour": [("A Field’s documentation of the seed library",
+             "https://afield.org/person/vivien-sansour/")],
+"kiwanga": [("Flowers for Africa at Goodman Gallery",
+             "https://www.goodman-gallery.com/")],
+"okoyomon": [("MMK’s own booklet for Earthseed",
+              "https://cms.mmk.art/site/assets/files/5224/mmk_booklet_earthseed_en-1.pdf")],
 }
 
 
@@ -127,5 +238,5 @@ def script(slug):
 
 if __name__ == "__main__":
     for k in AUDIO:
-        t = script(k)
-        print(f"{k:16} {len(t.split()):4} words  ~{len(t.split())/2.4:4.0f} sec")
+        n = len(script(k).split())
+        print(f"{k:16} {n:4} Wörter   Bilder: {len(EXTRA.get(k, []))}")

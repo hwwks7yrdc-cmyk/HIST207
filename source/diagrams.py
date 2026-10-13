@@ -85,8 +85,8 @@ def paterson():
 def sonjasdotter():
     """A purity standard sorts living practice into a gene bank, then a return."""
     p = [DEFS]
-    p.append(lab(60, 70, "The standard that fills a gene bank", "dg-title"))
-    p.append(lab(60, 104, "A rule written in the 1880s decides which plants count as "
+    p.append(lab(60, 62, "The standard that fills a gene bank", "dg-title"))
+    p.append(lab(60, 92, "A rule written in the 1880s decides which plants count as "
                           "legitimate. The rest are archived.", "dg-note"))
     # the field, many different shapes
     import math
@@ -124,11 +124,12 @@ def sonjasdotter():
     p.append(lab(616, 374, "held at minus eighteen, alive, uncultivated",
                  "dg-lab dg-lab--dim"))
     # the return
+    # the return runs back underneath, through empty ground
     p.append(f'<path class="dg-arrow dg-arrow--live dg-arrow--dash" '
-             f'd="M900 414 C1070 414 1120 380 1120 300 C1120 120 820 96 420 96 '
-             f'C250 96 150 112 150 168" marker-end="url(#ah-live)"/>')
-    p.append(lab(600, 84, "Allkorn, and the breeder Hans Larsson, asking for them back "
-                          "and growing them again", "dg-lab dg-lab--live", anchor="middle"))
+             f'd="M596 372 H214 V314" marker-end="url(#ah-live)"/>')
+    for k, line in enumerate(["Allkorn, and the breeder Hans Larsson,",
+                              "asking for them back and growing them again"]):
+        p.append(lab(238, 400 + k * 20, line, "dg-lab dg-lab--live"))
     p.append(lab(60, 470, "The film argues the purity standard was a fiction, and that "
                           "current seed law still rests on it.", "dg-foot"))
     return svg("sonjasdotter", "A sieve labelled purity standard sorts many different "

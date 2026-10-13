@@ -514,8 +514,12 @@ def build_colophon():
     <p class="muted narrow" style="margin-top:1.4rem">All works remain the property of their artists. Images
     are reproduced here for a student exhibition and are credited to artist and source on the page where they
     appear. Where no image has yet been cleared, the page carries a designed placeholder in the exhibition
-    identity rather than a borrowed photograph. The nine diagrams, the nine curators\u2019 notes, the poster and
-    the placeholder cards were all made for this exhibition by the curators.</p>
+    identity rather than a borrowed photograph. Eight of the nine now carry a gallery of documentation of the
+    work itself, taken from the artist\u2019s own site, their distributor or the institution that showed it,
+    and credited image by image. Only Precious Okoyomon\u2019s <cite>Earthseed</cite> still waits for a cleared
+    installation view. The nine diagrams, the nine curators\u2019 notes, the poster and the one remaining
+    placeholder card were made for this exhibition by the curators, and the diagrams are marked on every page
+    as our reading rather than material from the artist.</p>
     <p class="muted narrow">The photograph at the entrance is of the Svalbard Global Seed Vault on
     Spitsbergen, by Bjoertvedt, published on Wikimedia Commons under a Creative Commons
     Attribution-ShareAlike 3.0 licence. The mirrored work above the vault door is
@@ -658,20 +662,25 @@ def has_asset(rel):
 
 
 def dossier(w):
-    """What the exhibition holds on this work beyond the single photograph:
-    a drawn diagram, a spoken guide with its transcript, and any further
-    images that have been cleared. Rendered so that an external link is
-    somewhere to go afterwards rather than the only way to see anything."""
+    """What the exhibition holds on this work beyond the opening photograph.
+    Documentation of the work comes first. The drawn figure comes last and is
+    marked as what it is: our reading, not material from the project."""
     slug = w["slug"]
     parts = []
 
-    # 1. the diagram
-    parts.append(f"""<section class="dos__item">
-      <p class="dos__k">Figure</p>
-      <figure class="dos__dia">
-        {DG.DIAGRAMS[slug]}
-        <figcaption>{DG.CAPTIONS[slug]}</figcaption>
-      </figure>
+    # 1. further documentation of the work itself
+    extra = [e for e in EX.EXTRA.get(slug, []) if has_asset("img/" + e[0])]
+    if extra:
+        figs = ""
+        for fn, alt, cap in extra:
+            iw, ih = imgsize(fn)
+            figs += (f'<figure class="gal__f"><img src="assets/img/{fn}" '
+                     f'alt="{html.escape(alt)}" width="{iw}" height="{ih}" '
+                     f'loading="lazy" decoding="async">'
+                     f'<figcaption>{cap}</figcaption></figure>')
+        parts.append(f"""<section class="dos__item">
+      <p class="dos__k">More of the work <span>{len(extra) + 1} images in total</span></p>
+      <div class="gal">{figs}</div>
     </section>""")
 
     # 2. the artist: practice, and their own words where a source could be verified
@@ -689,24 +698,30 @@ def dossier(w):
       </div>
     </section>""")
 
-    # 3. the curators' note: the wall text, written to be read aloud
+    # 3. film, sound and archives held by the project itself
+    src = EX.SOURCE_MEDIA.get(slug, [])
+    if src:
+        items = "".join(f'<li><a href="{u}" rel="noopener">{html.escape(t)}</a></li>'
+                        for t, u in src)
+        parts.append(f"""<section class="dos__item">
+      <p class="dos__k">Held by the project <span>film, sound and archives, at the source</span></p>
+      <ul class="dos__src">{items}</ul>
+    </section>""")
+
+    # 4. the curators' note
     parts.append(f"""<section class="dos__item">
       <p class="dos__k">Curators\u2019 note</p>
       <blockquote class="dos__script"><p>{html.escape(EX.script(slug))}</p></blockquote>
     </section>""")
 
-    # 4. further images, only those actually present
-    extra = [e for e in EX.EXTRA.get(slug, []) if has_asset("img/" + e[0])]
-    if extra:
-        figs = ""
-        for fn, alt, cap in extra:
-            iw, ih = imgsize(fn)
-            figs += (f'<figure><img src="assets/img/{fn}" alt="{html.escape(alt)}" '
-                     f'width="{iw}" height="{ih}" loading="lazy" decoding="async">'
-                     f'<figcaption>{cap}</figcaption></figure>')
-        parts.append(f"""<section class="dos__item">
-      <p class="dos__k">Further images</p>
-      <div class="dos__gal">{figs}</div>
+    # 5. last, and clearly ours rather than the artist's
+    parts.append(f"""<section class="dos__item dos__item--ours">
+      <p class="dos__k">A reading, not a document <span>drawn by the curators</span></p>
+      <figure class="dos__dia">
+        {DG.DIAGRAMS[slug]}
+        <figcaption>{DG.CAPTIONS[slug]} It is our interpretation of how the
+        collection operates, and no part of it comes from the artist.</figcaption>
+      </figure>
     </section>""")
 
     link = ""
