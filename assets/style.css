@@ -553,8 +553,17 @@ blockquote.pull footer{font-family:var(--san);font-size:.72rem;letter-spacing:.0
 
 /* ---------- the vault photograph, once one is cleared -------------------- */
 .anchorimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  opacity:.5;z-index:0}
-.hero--photo .hero__grid{opacity:.35}
+  opacity:.62;z-index:0;filter:saturate(.72) contrast(1.04)}
+/* the photograph replaces the drawn motif it stood in for; hiding it also keeps
+   the decorative SVG out of the accessibility tree */
+.hero--photo .hero__grid{display:none}
+/* the scrim: keeps the title side cold and dark, lets the vault read on the right */
+.hero--photo::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    linear-gradient(103deg,rgba(11,26,36,.95) 0%,rgba(11,26,36,.88) 32%,
+      rgba(11,26,36,.52) 62%,rgba(11,26,36,.68) 100%),
+    linear-gradient(to top,rgba(11,26,36,.9) 0%,rgba(11,26,36,.1) 42%,
+      rgba(11,26,36,.45) 100%)}
 
 /* ---------- the artist block inside a dossier --------------------------- */
 .dos__bio{max-width:52rem}
@@ -566,3 +575,12 @@ blockquote.pull footer{font-family:var(--san);font-size:.72rem;letter-spacing:.0
   line-height:1.45;margin:0 0 .5rem;color:var(--ink)}
 .dos__said footer{font-family:var(--san);font-size:.72rem;letter-spacing:.03em;
   color:var(--ice);line-height:1.5}
+
+/* ---------- credit for the entrance photograph -------------------------- */
+.hero__credit{margin:2rem 0 0;font-family:var(--san);font-size:.63rem;line-height:1.55;
+  color:#7e95a4;max-width:52ch}
+.hero__credit cite{font-style:italic}
+@media (min-width:60rem){
+  .hero__credit{position:absolute;right:0;bottom:0;margin:0;text-align:right;
+    max-width:36rem}
+}
