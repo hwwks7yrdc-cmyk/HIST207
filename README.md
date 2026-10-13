@@ -157,7 +157,19 @@ entrance itself and again in the colophon, and it names both the photographer an
 *Perpetual Repercussion* by Dyveke Sanne, the mirrored work above the door. If you
 ever replace this file, carry both credits over.
 
-**2. Further images per work.** Add entries to `EXTRA` in `source/extras.py` as
-`("filename.jpg", "alt text", "caption with credit")` and put the file in
-`assets/img/`. A gallery appears under that work. Entries whose file is missing are
-skipped, so you can list them before you have them.
+**2. Further images per work.** Eight of the nine works now carry a gallery of
+documentation taken from the artists' own sites, their distributors, or the
+institutions that showed the work. These live in `EXTRA` in `source/extras.py` as
+`("filename.jpg", "alt text", "caption with its own credit")`, with the file in
+`assets/img/`. Entries whose file is missing are skipped, so you can list one
+before you have it.
+
+The one gap left is an installation view of Precious Okoyomon's *Earthseed*. Its
+page carries a designed card plus a photograph of kudzu that is captioned as what
+it is: the plant, not the installation.
+
+**Everything in a gallery must be documentation of the work.** The drawn figures
+are ours, and they sit last on every page under the heading "A reading, not a
+document", with a dashed frame and a caption saying no part of them comes from the
+artist. Do not move a figure up into the documentation, and do not add a generic
+image to a gallery to pad it out.
