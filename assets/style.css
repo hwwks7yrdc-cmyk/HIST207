@@ -560,9 +560,26 @@ blockquote.pull footer{font-family:var(--san);font-size:.72rem;letter-spacing:.0
 /* ---------- the vault photograph, once one is cleared -------------------- */
 .anchorimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   opacity:.62;z-index:0;filter:saturate(.72) contrast(1.04)}
-/* the photograph replaces the drawn motif it stood in for; hiding it also keeps
-   the decorative SVG out of the accessibility tree */
+/* the photograph replaces the drawn field of boxes, which would only fight it.
+   The seedling is not decoration though: it is the one mark in the identity
+   that sets something living against something sealed, so it comes back on its
+   own, at the size of a single accession, beside the door rather than inside
+   it. Same classes, so it grows and stops growing by the same rules. */
 .hero--photo .hero__grid{display:none}
+.hero__sprout{position:absolute;z-index:2;pointer-events:none;width:auto;
+  top:11vh;right:4vw;height:clamp(7rem,21vh,13rem);
+  filter:drop-shadow(0 .5rem 1.8rem rgba(0,0,0,.65))}
+/* the grid's strokes were mixed for a flat dark ground and vanish on a
+   photograph, so the same elements are given their own weight here */
+.hero__sprout .cell{stroke:rgba(232,238,242,.45);stroke-width:1.4}
+.hero__sprout .cell-line{stroke:rgba(232,238,242,.26)}
+.hero__sprout .cell-live{fill:rgba(45,100,66,.5);stroke:var(--germ-lift);stroke-width:2.2}
+.hero__sprout .cell-live-line{stroke:rgba(145,205,160,.8)}
+.hero__sprout .stem{stroke-width:3.4}
+@media (min-width:60rem){
+  .hero__sprout{top:auto;bottom:clamp(2.5rem,9vh,6.5rem);
+    right:clamp(4rem,14vw,19rem);height:clamp(12rem,36vh,22rem)}
+}
 /* the scrim: keeps the title side cold and dark, lets the vault read on the right */
 .hero--photo::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
   background:
