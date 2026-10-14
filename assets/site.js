@@ -342,3 +342,33 @@
   if (!asked && window.location.hash && window.location.hash !== "#") return;
   whenReady(play);
 })();
+
+/* ===================================================================== */
+/* The depth marker is page chrome and floats over everything at the      */
+/* middle of the right edge. Several bands run edge to edge — the preview */
+/* wall, the wall in Room II, and every work's opening photograph — so    */
+/* the marker lands 40px inside the image and reads as a line drawn       */
+/* across the artwork. On dark pictures nobody notices; on a white        */
+/* gallery wall it is plainly wrong. It yields while such a band crosses  */
+/* the middle of the viewport, and comes back after. The entrance is      */
+/* deliberately not in the list: there the marker sits in the dark scrim  */
+/* at the right of the vault photograph, where it belongs.                */
+/* ===================================================================== */
+(function () {
+  "use strict";
+  var depth = document.querySelector(".depth");
+  var bands = document.querySelectorAll(".tiles, .wall__track, .work__fig");
+  if (!depth || !bands.length || !("IntersectionObserver" in window)) return;
+
+  var on = [];
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      var i = on.indexOf(e.target);
+      if (e.isIntersecting && i < 0) on.push(e.target);
+      else if (!e.isIntersecting && i > -1) on.splice(i, 1);
+    });
+    document.documentElement.classList.toggle("depth-off", on.length > 0);
+  }, { rootMargin: "-46% 0px -46% 0px" });
+
+  Array.prototype.forEach.call(bands, function (el) { io.observe(el); });
+})();

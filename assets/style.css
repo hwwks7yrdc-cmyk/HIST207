@@ -286,6 +286,13 @@ blockquote.pull footer{font-family:var(--san);font-size:.72rem;letter-spacing:.0
 .depth__label{font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;color:var(--ice);
   writing-mode:vertical-rl;text-orientation:mixed}
 @media (max-width:48rem){.depth{display:none}}
+/* the marker yields while a band that runs edge to edge crosses the middle of
+   the screen, so it is never drawn across a photograph of an artwork */
+.depth{transition:opacity .3s var(--ease)}
+.depth-off .depth{opacity:0}
+/* the replay cue is driven entirely by script: without it the fragment does
+   nothing, so the link does not appear at all */
+.no-js .hero__again{display:none}
 
 /* ---------- colophon / tables ------------------------------------------ */
 .facts{border-top:1px solid var(--rule);margin:0}
@@ -747,7 +754,9 @@ html.tun-lock,html.tun-lock body{overflow:hidden}
 
 /* no flight for anyone who has asked their system to reduce motion: the same
    five questions, held still */
-.tun__still{display:none}
+/* the colour sits outside the reduced-motion query so the still version is
+   never dark ink on the dark ground, whatever shows it */
+.tun__still{display:none;color:var(--frost)}
 @media (prefers-reduced-motion:reduce){
   .tun__space{display:none}
   .tun::after{background:none}
