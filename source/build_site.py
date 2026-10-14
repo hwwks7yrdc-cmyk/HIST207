@@ -25,7 +25,8 @@ os.makedirs(OUT, exist_ok=True)
 
 NAV = [("index.html", "Entrance"), ("room-i.html", "Deposit"),
        ("room-ii.html", "Custody"), ("room-iii.html", "Thaw"),
-       ("register.html", "Register"), ("colophon.html", "Colophon")]
+       ("register.html", "Register"), ("team.html", "Team"),
+       ("colophon.html", "Colophon")]
 
 
 def head(title, desc, current, tone="light", extra=""):
@@ -1088,12 +1089,84 @@ def build_withdrawal():
                 "withdrawal.html") + body + foot()
 
 
+# ---------------------------------------------------------------- team
+# Who did what. Three strands as the team set them out in the proposal, with
+# the one change that happened in execution: the site build moved from Seble to
+# Tim. The selection of the nine works was a joint decision and is credited as
+# one, not split into halves nobody could verify.
+STRANDS = [
+    ("Tim Maurice Steiner", "Research, texts and the site", [
+        "Artist research, and the nine work descriptions",
+        "The four-line label carried by every work",
+        "The curatorial statement",
+        "The build of this site, and its deployment",
+    ]),
+    ("Qing Guo", "Design and identity", [
+        "The poster, A2, and the square promotional image",
+        "Palette and typography",
+        "The page template and the threshold panels",
+    ]),
+    ("Seble Getaneh", "Media and verification", [
+        "Image preparation, sourcing and credits",
+        "Link checking across the exhibition",
+    ]),
+]
+
+TOGETHER = [
+    ("The nine works", "Chosen together by Tim Maurice Steiner and Seble Getaneh."),
+    ("Every deliverable", "Reviewed by all three before it went into the exhibition."),
+]
+
+
+def build_team():
+    strands = ""
+    for i, (who, strand, items) in enumerate(STRANDS, 1):
+        li = "".join(f"<li>{html.escape(t)}</li>" for t in items)
+        strands += f"""<section class="strand">
+      <p class="strand__n">{i:02d}</p>
+      <div>
+        <h3>{html.escape(who)}</h3>
+        <p class="strand__role">{html.escape(strand)}</p>
+        <ul>{li}</ul>
+      </div>
+    </section>"""
+    shared = "".join(
+        f"<div><dt>{html.escape(k)}</dt><dd>{html.escape(v)}</dd></div>"
+        for k, v in TOGETHER)
+
+    body = f"""{DEPTH}
+<main id="main">
+<section class="band">
+  <div class="wrap">
+    <p class="kicker">Team</p>
+    <h2>Who did what</h2>
+    <p class="lede narrow" style="margin-top:1.4rem">Three strands, and one decision taken
+    together. An exhibition that asks who selected, who holds and who may withdraw should be
+    able to answer the same questions about itself.</p>
+
+    <div class="strands">{strands}</div>
+
+    <dl class="facts facts--wide">{shared}</dl>
+
+    <p class="muted narrow" style="margin-top:2.4rem">{html.escape(S.COURSE)}, taught by
+    Prof. Rui Hu, autumn 2026. The division above is the one the team worked to. The sequence
+    was to confirm the nine works, write one page end to end as the specimen, build the
+    template from it, draft the other eight, then assemble and check.</p>
+  </div>
+</section>
+</main>"""
+    return head("Team \u00b7 Duplicate Sample",
+                "Who did what: three strands and one decision taken together.",
+                "team.html") + body + foot()
+
+
 if __name__ == "__main__":
     open(os.path.join(OUT, "index.html"), "w", encoding="utf-8").write(build_index())
     for i, r in enumerate(S.ROOMS):
         open(os.path.join(OUT, r["slug"] + ".html"), "w", encoding="utf-8").write(build_room(i))
     open(os.path.join(OUT, "colophon.html"), "w", encoding="utf-8").write(build_colophon())
     open(os.path.join(OUT, "register.html"), "w", encoding="utf-8").write(build_register())
+    open(os.path.join(OUT, "team.html"), "w", encoding="utf-8").write(build_team())
     open(os.path.join(OUT, "withdrawal.html"), "w", encoding="utf-8").write(build_withdrawal())
     open(os.path.join(OUT, "assets", "favicon.svg"), "w", encoding="utf-8").write(FAVICON)
     open(os.path.join(OUT, ".nojekyll"), "w").write("")
