@@ -141,9 +141,13 @@ Things worth knowing before changing it:
   subtree, and the corridor empties halfway through.
 - Lateral offsets are written for a 1440 by 900 window and converted to
   window-relative lengths. In fixed pixels nothing is ever visible on a phone.
-- It plays once per visitor, keyed `ds.descent.v1` in `localStorage`, and never
-  on a deep link into the page. `index.html#descend` replays it, which is what
-  makes it usable in a live presentation; the colophon carries that link.
+- It plays on **every** arrival at the entrance, and never on a deep link into
+  the page. It used to play once per browser, remembered under `ds.descent.v1`;
+  that key is no longer read or written, and a value left over from before is
+  ignored. `index.html#descend` restarts it without reloading, which is what the
+  *Replay the entry* cue under the title and the link in the colophon both use.
+  To go back to once per visitor, restore the `localStorage` gate at the foot of
+  the descent block in `assets/site.js`; nothing else depends on it.
 - Under `prefers-reduced-motion: reduce` there is no flight at all. The same five
   questions and the same door are held still for three seconds.
 
