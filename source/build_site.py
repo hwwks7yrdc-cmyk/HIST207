@@ -603,8 +603,8 @@ def build_colophon():
         exhibition an inventory and lets the team refer to works without ambiguity.</p>
         <p class="muted">The entrance opens with a descent down a corridor, past the nine
         accessions, through the four questions every label in the exhibition asks and the one
-        it ends on. It plays once per visitor and can be skipped at any point.
-        <a href="index.html#descend">Play it again</a>.</p>
+        it ends on. It plays on every arrival and can be skipped at any point, with the button
+        on screen or with a single key. <a href="index.html#descend">Play it again</a>.</p>
       </div>
       <div class="assets">
         <figure>
