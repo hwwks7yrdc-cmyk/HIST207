@@ -111,6 +111,24 @@ cite{font-style:italic}
 .hero__scroll span{display:block;width:1.6rem;height:1px;background:currentColor;
   transform-origin:left;animation:reach 2.6s var(--ease) infinite}
 @keyframes reach{0%,100%{transform:scaleX(.4)}50%{transform:scaleX(1)}}
+/* the two cues at the foot of the entrance: down into the page, or back to the
+   start of the sequence. The sequence plays once per visitor and is remembered
+   in the browser, so without this the only way back is the colophon. */
+.hero__cues{display:flex;flex-wrap:wrap;align-items:center;gap:.9rem 2.4rem}
+.hero__cues .hero__scroll{margin:2.6rem 0 0}
+.hero__again{margin:2.6rem 0 0;font-family:var(--san);font-size:.72rem;letter-spacing:.17em;
+  text-transform:uppercase;color:#8ba0ad;text-decoration:none;
+  border-bottom:1px solid rgba(139,160,173,.45);padding-bottom:.15rem;
+  transition:color .2s,border-color .2s}
+.hero__again:hover,.hero__again:focus-visible{color:var(--frost);
+  border-color:rgba(232,238,242,.7)}
+/* on a narrow screen the two cues stagger against each other on one line, so
+   they stack and read as two */
+@media (max-width:34rem){
+  .hero__cues{flex-direction:column;align-items:flex-start;gap:0}
+  .hero__cues .hero__scroll{margin-top:2.2rem}
+  .hero__again{margin-top:1.1rem}
+}
 
 /* animated motif */
 .cell{fill:none;stroke:#223644;stroke-width:1}
@@ -626,6 +644,21 @@ blockquote.pull footer{font-family:var(--san);font-size:.72rem;letter-spacing:.0
 .dos__src a{color:var(--ink);text-decoration:none;
   border-bottom:1px solid var(--germ);padding-bottom:1px}
 .dos__src a:hover{color:var(--germ)}
+
+/* the artist speaking, recorded by somebody else. The link is the whole item,
+   because nothing here is ours to play: it opens where it was published. */
+.dos__hear{list-style:none;margin:0;padding:0;max-width:52rem}
+.dos__hear li{padding:1.1rem 0;border-top:1px solid var(--rule)}
+.dos__hear li:first-child{border-top:0;padding-top:0}
+.dos__hear>li>a{display:inline-block;font-size:1.05rem;color:var(--ink);
+  text-decoration:none;border-bottom:1px solid var(--germ);padding-bottom:.1rem}
+.dos__hear>li>a::before{content:"\25B6";font-size:.6em;color:var(--germ);
+  margin-right:.6em;vertical-align:.18em}
+.dos__hear>li>a:hover{color:var(--germ)}
+.dos__hear-what{display:block;margin-top:.55rem;font-size:.92rem;line-height:1.6;
+  color:var(--ink-2)}
+.dos__hear-what cite{font-style:italic}
+.dos__hear .dos__said{margin-top:1.1rem}
 
 /* the drawn figure is ours, so it is set apart from the documentation */
 .dos__item--ours{border-top:1px solid var(--ice)}
