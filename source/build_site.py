@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
-"""Generates the Duplicate Sample static site.
-
-Run it from anywhere: python3 source/build_site.py
-"""
-import os, sys, html, shutil
+"""Generates the Duplicate Sample static site into /home/claude/site."""
+import os, html, shutil
 from PIL import Image
-
-HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)
-OUT = os.path.dirname(HERE)
-IMGDIR = os.path.join(OUT, "assets", "img")
 import sitedata as S
 import diagrams as DG
 import extras as EX
 import artists as AR
+import entry as EN
+
+IMGDIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "site", "assets", "img")
+if not os.path.isdir(IMGDIR):
+    IMGDIR = "/home/claude/site/assets/img"
+
 
 def imgsize(name):
     try:
@@ -22,6 +20,7 @@ def imgsize(name):
     except Exception:
         return (1400, 900)
 
+OUT = "/home/claude/site"
 os.makedirs(OUT, exist_ok=True)
 
 NAV = [("index.html", "Entrance"), ("room-i.html", "Deposit"),
@@ -132,6 +131,68 @@ def hero_svg():
 
 
 # ---------------------------------------------------------------- index
+def descent():
+    """The entry sequence, laid out in 3D depth.
+
+    Everything is computed here and handed to CSS as custom properties, so the
+    stylesheet holds no numbers that belong to the score and the script holds
+    none at all. The whole block ships with `hidden` on it: with JavaScript off
+    it never appears, and the entrance behaves exactly as it did before.
+
+    Each object gets three numbers. --z is how far down the corridor it sits;
+    --in and --dur are when its fade starts and how long it runs, both derived
+    from the distance at which that kind of object should appear and vanish
+    rather than from a span of seconds. Negative starts are deliberate: the
+    object is already part way into its approach on the opening frame, under
+    the stage's own fade up out of the dark.
+    """
+    parts = []
+    for item in EN.SCORE:
+        kind, at = item[0], item[-1]
+        z = EN.depth_for(at)
+        begin, dur = EN.window(kind, z)
+        base = f'--z:{z};--in:{begin}s;--dur:{dur}s'
+        if kind == "ring":
+            parts.append(f'<i class="tun__ring" style="{base}"></i>')
+        elif kind == "ask":
+            q = EN.QUESTIONS[item[1]]
+            off = f';--y:{EN.vertical(item[2])}' if item[2] else ""
+            parts.append(f'<p class="tun__ask" style="{base}{off}">{html.escape(q)}</p>')
+        else:
+            slug, x, y = item[1], item[2], item[3]
+            cap = EN.PLATE_CAP[slug]
+            parts.append(
+                f'<figure class="tun__plate" '
+                f'style="{base};--x:{EN.lateral(x)};--y:{EN.vertical(y)}">'
+                f'<img src="assets/img/tun-{slug}.jpg" alt="" width="420" height="300" '
+                f'decoding="async">'
+                f'<figcaption>{html.escape(cap)}</figcaption></figure>')
+
+    # the door, the one object the camera never reaches
+    d = EN.DOOR
+    parts.append(f"""<div class="tun__door" style="--z:{EN.DOOR_Z};--in:{EN.DOOR_IN}s">
+      <p class="tun__k">{html.escape(d['kicker'])}</p>
+      <p class="tun__word">{html.escape(d['word'])}</p>
+      <p class="tun__line">{html.escape(d['line'])}</p>
+    </div>""")
+
+    # the still version, for anyone who has asked their system to reduce motion:
+    # the same five questions and the same door, held still
+    still = "".join(f"<li>{html.escape(q)}</li>" for q in EN.QUESTIONS)
+
+    return f"""<div class="tun" id="descent" hidden
+     style="--travel:{EN.TRAVEL}px;--dur-fly:{EN.DURATION}s"
+     role="dialog" aria-label="Entry sequence">
+  <div class="tun__space" aria-hidden="true"><div class="tun__stage">{''.join(parts)}</div></div>
+  <div class="tun__still" aria-hidden="true">
+    <ol>{still}</ol>
+    <p class="tun__still-door">{html.escape(d['word'])}</p>
+  </div>
+  <button class="tun__skip" type="button">Skip<span> the descent</span></button>
+</div>
+"""
+
+
 def build_index():
     rooms_html = ""
     for r in S.ROOMS:
@@ -151,7 +212,8 @@ def build_index():
     q2, c2 = S.TSING[1]
     q3, c3 = S.TSING[2]
 
-    body = f"""{DEPTH}
+    body = f"""{descent()}
+{DEPTH}
 <main id="main">
 
 <section class="hero{' hero--photo' if has_asset('img/svalbard.jpg') else ''}">
@@ -492,6 +554,10 @@ def build_colophon():
         from this site.</p>
         <p class="muted">Every work runs under a code in the form DS&ndash;I&ndash;01, which gives the
         exhibition an inventory and lets the team refer to works without ambiguity.</p>
+        <p class="muted">The entrance opens with a descent down a corridor, past the nine
+        accessions, through the four questions every label in the exhibition asks and the one
+        it ends on. It plays once per visitor and can be skipped at any point.
+        <a href="index.html#descend">Play it again</a>.</p>
       </div>
       <div class="assets">
         <figure>
@@ -619,9 +685,13 @@ def preview_wall():
     tiles = ""
     for w in S.WORKS:
         r = next(x for x in S.ROOMS if x["n"] == w["room"])
-        iw, ih = imgsize(w["img"])
+        # the tile is drawn at about 480px, so it takes the small copy made by
+        # entryplates.py and falls back to the full image if that is missing
+        small = "tile-" + w["slug"] + ".jpg"
+        src = small if has_asset("img/" + small) else w["img"]
+        iw, ih = imgsize(src)
         tiles += f"""<a class="tile" href="{r['slug']}.html#{w['slug']}">
-      <img src="assets/img/{w['img']}" alt="" width="{iw}" height="{ih}"
+      <img src="assets/img/{src}" alt="" width="{iw}" height="{ih}"
            loading="lazy" decoding="async">
       <span class="tile__v">
         <span class="code">{w['code']}</span>
@@ -636,9 +706,9 @@ def preview_wall():
   </div>
   <div class="tiles">{tiles}</div>
   <div class="wrap">
-    <p class="preview__note">Four of the nine are shown here by a designed card rather
-    than a photograph, because no image has been cleared for them yet. Every page says so
-    on its face.</p>
+    <p class="preview__note">One of the nine is shown here by a designed card rather than
+    a photograph, because no installation view of it has been cleared. Its page says so on
+    its face.</p>
   </div>
 </section>"""
 

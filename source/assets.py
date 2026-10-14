@@ -81,8 +81,8 @@ print(prep("son.jpg", "sonjasdotter-portrait.jpg", 700))
 # ---- designed placeholders
 placeholder("sonjasdotter.jpg", "DS – I – 02", "1880s",
             "the decade a purity standard began\nsending farmers’ grain into gene banks")
-placeholder("balkin.jpg", "DS – I – 03", "0 rejected",
-            "the archive is not curated;\neverything offered is accepted")
+placeholder("balkin.jpg", "DS – I – 03", "nothing is chosen",
+            "everything offered is accepted;\nthe ordering happens afterwards")
 placeholder("sansour.jpg", "DS – II – 02", "no register",
             "the library keeps no record\nof who takes seeds")
 placeholder("okoyomon.jpg", "DS – III – 02", "kudzu",
