@@ -130,6 +130,47 @@ def hero_svg():
 </svg>"""
 
 
+def hero_sprout():
+    """Three sealed boxes, one of them open, with the seedling growing out of it.
+
+    The drawn field of 104 boxes behind the title was hidden the moment a
+    photograph of the vault was cleared, because a drawn field fights a
+    photograph of the real thing. That hid the seedling with it, and the
+    seedling is the only mark in the identity that sets something living
+    against something sealed.
+
+    It comes back at the size of a caption rather than a background: three
+    accessions on the snow beside the door, and the one in the middle has
+    opened. One box alone would read as a green panel, because nothing around
+    it would be shut.
+
+    Same classes as the grid, so the growth animation and the reduced-motion
+    rule that stops it both apply without a second set of rules. Only the
+    colours are restated, because strokes mixed for a dark flat ground
+    disappear against a photograph.
+    """
+    cw, ch, gx = 96, 120, 18
+    live = 1                                   # the middle one
+    parts = []
+    for i in range(3):
+        x = i * (cw + gx)
+        k = "cell-live" if i == live else "cell"
+        parts.append(f'<rect class="{k}" x="{x}" y="0" width="{cw}" height="{ch}"/>')
+        parts.append(f'<line class="{k}-line" x1="{x + 18}" y1="46" x2="{x + cw - 18}" y2="46"/>')
+        parts.append(f'<line class="{k}-line" x1="{x + 18}" y1="74" x2="{x + cw - 36}" y2="74"/>')
+    lx = live * (cw + gx) + cw / 2
+    parts.append(f'<path class="stem" d="M{lx} 0 C{lx + 14} -62 {lx - 14} -124 {lx + 4} -196"/>')
+    parts.append(f'<ellipse class="leaf leaf--a" cx="{lx - 26}" cy="-96" rx="21" ry="11.5" '
+                 f'transform="rotate(-24 {lx - 26} -96)"/>')
+    parts.append(f'<ellipse class="leaf leaf--b" cx="{lx + 30}" cy="-148" rx="21" ry="11.5" '
+                 f'transform="rotate(22 {lx + 30} -148)"/>')
+    w = 3 * cw + 2 * gx
+    return f"""<svg class="hero__sprout" viewBox="-14 -216 {w + 28} {ch + 232}"
+   role="img" aria-label="Three sealed storage boxes, the middle one open with a seedling growing out of it.">
+  {''.join(parts)}
+</svg>"""
+
+
 # ---------------------------------------------------------------- index
 def descent():
     """The entry sequence, laid out in 3D depth.
@@ -219,6 +260,7 @@ def build_index():
 <section class="hero{' hero--photo' if has_asset('img/svalbard.jpg') else ''}">
   {anchor_image("hero")}
   {hero_svg()}
+  {hero_sprout() if has_asset('img/svalbard.jpg') else ''}
   <div class="hero__inner">
     <h1><span>Duplicate</span><span class="it">Sample</span></h1>
     <p class="hero__strap">{html.escape(S.STRAP)}</p>
