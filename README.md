@@ -70,6 +70,7 @@ room-i.html       Deposit    · Paterson, Sonjasdotter, Balkin
 room-ii.html      Custody    · Orlow, Sansour, Futurefarmers
 room-iii.html     Thaw       · Alves, Okoyomon, Kiwanga
 register.html     all nine accessions as a filterable inventory
+team.html         who did what: three strands and one joint decision
 withdrawal.html   the request form; writes a slip, stores nothing
 colophon.html     credits, image rights, visual identity, references
 assets/style.css  the whole design system, one file
