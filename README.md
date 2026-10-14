@@ -199,6 +199,15 @@ The one gap left is an installation view of Precious Okoyomon's *Earthseed*. Its
 page carries a designed card plus a photograph of kudzu that is captioned as what
 it is: the plant, not the installation.
 
+**3. Recordings of the artists.** Six works link one, in `LISTEN` in
+`source/extras.py`. Nothing there is ours and nothing is hosted: each entry is a
+label, a URL, a sentence saying what the recording is, and a `quote` that is only
+filled where the publisher prints a transcript. No player is embedded, on purpose
+and twice over. The recordings are rights-reserved by NPR, The Showroom, Acast,
+Podbean and The Art Newspaper, and an embedded player would be a third-party
+request, which this site does not make and which would not load in mainland China
+anyway. Sonjasdotter, Alves and Futurefarmers carry none; the colophon says why.
+
 **Everything in a gallery must be documentation of the work.** The drawn figures
 are ours, and they sit last on every page under the heading "A reading, not a
 document", with a dashed frame and a caption saying no part of them comes from the
