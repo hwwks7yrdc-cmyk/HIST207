@@ -224,12 +224,13 @@ SOURCE_MEDIA = {
               "https://www.futurelibrary.no/")],
 "alves": [("The full image archive of the project",
            "https://www.mariatherezaalves.org/works/seeds-of-change")],
-"balkin": [("The archive’s own catalogue of contributions",
-            "https://archiveofsinkingandmelting.org/")],
+"balkin": [("Southern Exposure, who house the archive",
+            "https://soex.org/projects-exhibitions/peoples-archive-sinking-and-melting")],
 "sansour": [("A Field’s documentation of the seed library",
              "https://afield.org/person/vivien-sansour/")],
-"kiwanga": [("Flowers for Africa at Goodman Gallery",
-             "https://www.goodman-gallery.com/")],
+"kiwanga": [("One of the sixteen arrangements, at Goodman Gallery",
+             "https://goodman-gallery.com/artists/kapwani-kiwanga/"
+             "flowers-for-africa-union-of-south-africa-121850")],
 "okoyomon": [("MMK’s own booklet for Earthseed",
               "https://cms.mmk.art/site/assets/files/5224/mmk_booklet_earthseed_en-1.pdf")],
 }

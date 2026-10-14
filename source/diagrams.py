@@ -415,6 +415,26 @@ DIAGRAMS = {
     "kiwanga": kiwanga(),
 }
 
+
+# Each diagram carried its own <defs> with the arrowhead markers under the ids
+# "ah" and "ah-live". Three diagrams sit on one room page, so each page declared
+# those ids three times: invalid HTML, and every url(#ah) resolved to whichever
+# copy came first. The markers are identical, so nothing looked wrong, which is
+# exactly why it survived. Namespacing them per work makes each SVG valid and
+# self-contained. "ah-live" is replaced before "ah", or the shorter name would
+# eat the longer one.
+def _namespace(svg, slug):
+    for a, b in (('id="ah-live"', f'id="ah-live-{slug}"'),
+                 ("url(#ah-live)", f"url(#ah-live-{slug})"),
+                 ('id="ah"', f'id="ah-{slug}"'),
+                 ("url(#ah)", f"url(#ah-{slug})")):
+        svg = svg.replace(a, b)
+    return svg
+
+
+DIAGRAMS = {k: _namespace(v, k) for k, v in DIAGRAMS.items()}
+
+
 CAPTIONS = {
     "paterson": "How the work is structured. Drawn for this exhibition.",
     "sonjasdotter": "How a gene bank fills up, and how Allkorn runs it backwards. "

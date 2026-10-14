@@ -49,7 +49,8 @@ def head(title, desc, current, tone="light", extra=""):
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/lora-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/style.css">
-<noscript><style>.field__v{{grid-template-rows:1fr!important}}.reveal{{display:none}}</style></noscript>
+<noscript><style>.field__v{{grid-template-rows:1fr!important}}.reveal{{display:none}}
+.hero__again{{display:none}}</style></noscript>
 {extra}</head>
 <body data-tone="{tone}">
 <a class="skip" href="#main">Skip to the exhibition</a>
