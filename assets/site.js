@@ -257,7 +257,6 @@
   var tun = document.getElementById("descent");
   if (!tun) return;
 
-  var SEEN = "ds.descent.v1";
   var HOLD = 1.5;
   var FLY = parseFloat(tun.style.getPropertyValue("--dur-fly")) || 7;
   var root = document.documentElement;
@@ -265,13 +264,6 @@
               window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   var timer = null, running = false;
-
-  function seen() {
-    try { return window.localStorage.getItem(SEEN) === "1"; } catch (e) { return false; }
-  }
-  function remember() {
-    try { window.localStorage.setItem(SEEN, "1"); } catch (e) {}
-  }
 
   function onKey(ev) {
     if (ev.key === "Escape" || ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); end(); }
@@ -293,7 +285,6 @@
       tun.hidden = true;
       tun.classList.remove("tun--out");
     }, 900);
-    remember();
     if (window.location.hash === "#descend" && window.history.replaceState) {
       window.history.replaceState(null, "", window.location.pathname);
     }
@@ -342,10 +333,12 @@
     if (window.location.hash === "#descend") whenReady(play);
   });
 
-  /* Otherwise: only on a clean first arrival. Someone who has seen it, or who
-     has deep-linked to a section of this page, knows where they are going and
-     should not be held up. */
+  /* The sequence plays on every arrival at the entrance. It used to play once
+     per browser, remembered under ds.descent.v1; that key is no longer read or
+     written, and any value left in a visitor's browser from before is ignored.
+     The one exception stays: somebody who deep-links to a section of this page
+     knows where they are going and is not held up. */
   var asked = window.location.hash === "#descend";
-  if (!asked && (seen() || (window.location.hash && window.location.hash !== "#"))) return;
+  if (!asked && window.location.hash && window.location.hash !== "#") return;
   whenReady(play);
 })();

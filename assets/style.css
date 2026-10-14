@@ -112,8 +112,8 @@ cite{font-style:italic}
   transform-origin:left;animation:reach 2.6s var(--ease) infinite}
 @keyframes reach{0%,100%{transform:scaleX(.4)}50%{transform:scaleX(1)}}
 /* the two cues at the foot of the entrance: down into the page, or back to the
-   start of the sequence. The sequence plays once per visitor and is remembered
-   in the browser, so without this the only way back is the colophon. */
+   start of the sequence. The sequence plays on every arrival, so this is for a
+   visitor who skipped it and wants it back without reloading. */
 .hero__cues{display:flex;flex-wrap:wrap;align-items:center;gap:.9rem 2.4rem}
 .hero__cues .hero__scroll{margin:2.6rem 0 0}
 .hero__again{margin:2.6rem 0 0;font-family:var(--san);font-size:.72rem;letter-spacing:.17em;
