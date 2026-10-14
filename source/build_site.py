@@ -269,7 +269,12 @@ def build_index():
       <span>Nine artists</span><span>Three rooms</span>
       <span>{html.escape(S.COURSE)}</span>
     </div>
-    <a class="hero__scroll" href="#statement"><span></span>Descend</a>
+    <div class="hero__cues">
+      <a class="hero__scroll" href="#statement"><span></span>Descend</a>
+      <!-- the entry sequence plays once per visitor, so the way back to it has to
+           be somewhere a visitor will actually look, not only in the colophon -->
+      <a class="hero__again" href="index.html#descend">Replay the entry</a>
+    </div>
     {'<p class="hero__credit">Svalbard Global Seed Vault, Spitsbergen. Photograph by Bjoertvedt, CC BY-SA 3.0, via Wikimedia Commons. The mirrored work above the entrance is <cite>Perpetual Repercussion</cite> by Dyveke Sanne.</p>' if has_asset('img/svalbard.jpg') else ''}
   </div>
 </section>
@@ -628,6 +633,16 @@ def build_colophon():
     installation view. The nine diagrams, the nine curators\u2019 notes, the poster and the one remaining
     placeholder card were made for this exhibition by the curators, and the diagrams are marked on every page
     as our reading rather than material from the artist.</p>
+    <p class="muted narrow">Six of the nine pages link a recording of the artist speaking about the work:
+    a public radio programme, a symposium a gallery recorded and published itself, and three podcasts. None
+    of it was made by us and none of it is copied here. Each one is named, dated and linked, and plays on the
+    site that published it, which is also why no player is embedded: this exhibition makes no third-party
+    request of any kind. Katie Paterson’s page carries a sentence quoted from NPR’s own published
+    transcript; the other recordings have no transcript, so they are linked and described rather than quoted.
+    Three works carry no recording. Åsa Sonjasdotter’s film has its own sound, and the excerpt
+    Filmform publishes is already linked on her page; for Maria Thereza Alves and Futurefarmers every
+    published interview we could find is in print. We would rather leave those three empty than fill them
+    with a recording about something else.</p>
     <p class="muted narrow">The photograph at the entrance is of the Svalbard Global Seed Vault on
     Spitsbergen, by Bjoertvedt, published on Wikimedia Commons under a Creative Commons
     Attribution-ShareAlike 3.0 licence. The mirrored work above the vault door is
@@ -818,6 +833,26 @@ def dossier(w):
         parts.append(f"""<section class="dos__item">
       <p class="dos__k">Held by the project <span>film, sound and archives, at the source</span></p>
       <ul class="dos__src">{items}</ul>
+    </section>""")
+
+    # 3b. the artist speaking, recorded and published by somebody else.
+    # Named, dated and linked, never copied: none of it is ours, and the site
+    # makes no third-party request, so each one plays where it was published.
+    hear = EX.LISTEN.get(slug, [])
+    if hear:
+        items = ""
+        for h in hear:
+            said = ""
+            if h["quote"]:
+                said = (f'<blockquote class="dos__said"><p>&ldquo;'
+                        f'{html.escape(h["quote"])}&rdquo;</p>'
+                        f'<footer>{html.escape(h["said"])}</footer></blockquote>')
+            items += (f'<li><a href="{h["url"]}" rel="noopener">'
+                      f'{html.escape(h["label"])}</a>'
+                      f'<span class="dos__hear-what">{h["what"]}</span>{said}</li>')
+        parts.append(f"""<section class="dos__item">
+      <p class="dos__k">The artist, recorded <span>published elsewhere, and played there</span></p>
+      <ul class="dos__hear">{items}</ul>
     </section>""")
 
     # 4. the curators' note

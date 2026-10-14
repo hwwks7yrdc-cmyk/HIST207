@@ -9,6 +9,9 @@ recordings.
 EXTRA holds further images per work: (filename, alt text, caption). A file is
 only rendered if it is actually present in assets/img/, so the team can add
 material without touching the templates.
+
+LISTEN holds recordings of the artists speaking, none of them ours and none of
+them hosted here.
 """
 
 AUDIO = {
@@ -229,6 +232,71 @@ SOURCE_MEDIA = {
              "https://www.goodman-gallery.com/")],
 "okoyomon": [("MMK’s own booklet for Earthseed",
               "https://cms.mmk.art/site/assets/files/5224/mmk_booklet_earthseed_en-1.pdf")],
+}
+
+
+# Recordings of the artists speaking about these works. Everything here was made
+# and is published by somebody else: a public radio programme, a gallery that
+# recorded its own symposium, two podcasts. None of it is ours to copy, and none
+# of it is hosted here, so each one is named, dated and linked, and plays on the
+# publisher's own site.
+#
+# Six of the nine have one. Sonjasdotter's film carries its own sound and the
+# excerpt is already linked above; for Alves and Futurefarmers the published
+# interviews are all in print. Rather than fill those three with something
+# adjacent, they carry nothing, and the colophon says why.
+#
+# "quote" is only filled where the publisher prints a transcript. Lines nobody
+# has transcribed stay unquoted: the recording is linked and that is all that
+# can honestly be said about it.
+LISTEN = {
+"paterson": [{
+  "label": "Future Library on the TED Radio Hour",
+  "url": "https://www.npr.org/2022/10/28/1134069054/"
+         "building-a-library-of-unread-manuscripts-locked-away-until-2114",
+  "what": "NPR, <cite>Leaving a Mark</cite>, part four, 28 October 2022. Paterson "
+          "walks out to Nordmarka and explains what the forest is for.",
+  "quote": "Nobody will read the words until the forest has grown.",
+  "said": "Katie Paterson, from NPR’s published transcript of the broadcast",
+}],
+"balkin": [{
+  "label": "Rauschenberg Residency on Rising Water",
+  "url": "https://freshartinternational.podbean.com/e/captiva",
+  "what": "Fresh Art International, 13 October 2016, nine minutes. Balkin describes "
+          "the archive, and what it means to accept whatever is sent.",
+  "quote": None, "said": None,
+}],
+"orlow": [{
+  "label": "Symposium: Theatrum Botanicum and Other Forms of Knowledge",
+  "url": "https://theshowroom.org/resources/"
+         "symposium-theatrum-botanicum-and-other-forms-of-knowledge",
+  "what": "The Showroom, London, 29 October 2016. Orlow convened this himself with "
+          "Shela Sheikh, and the gallery published the recording. It belongs to the "
+          "work rather than reporting on it.",
+  "quote": None, "said": None,
+}],
+"sansour": [{
+  "label": "Vivien Sansour on the Palestine Heirloom Seed Library",
+  "url": "https://esalen.org/podcasts/vivien-sansour-on-the-palestine-heirloom-seed-library",
+  "what": "Voices of Esalen, 18 October 2021, fifty minutes, with the founder of the "
+          "library on what it holds and what it refuses to write down.",
+  "quote": None, "said": None,
+}],
+"okoyomon": [{
+  "label": "Precious Okoyomon on Talk Art",
+  "url": "https://shows.acast.com/talkart/episodes/precious-okoyomon",
+  "what": "Talk Art, season 22 episode 10, 8 August 2024, in which Okoyomon sets out "
+          "kudzu as a figure for colonisation, which is the argument the installation "
+          "makes without words.",
+  "quote": None, "said": None,
+}],
+"kiwanga": [{
+  "label": "A brush with… Kapwani Kiwanga",
+  "url": "https://www.theartnewspaper.com/2024/04/17/a-brush-with-kapwani-kiwana-podcast",
+  "what": "The Art Newspaper, 17 April 2024, Kiwanga with Ben Luke on the research "
+          "her work is built out of.",
+  "quote": None, "said": None,
+}],
 }
 
 
