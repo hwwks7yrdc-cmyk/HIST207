@@ -614,3 +614,112 @@ blockquote.pull footer{font-family:var(--san);font-size:.72rem;letter-spacing:.0
 .dos__item--ours{border-top:1px solid var(--ice)}
 .dos__item--ours .dos__k{color:var(--ice)}
 .dos__item--ours .dos__dia{border-style:dashed}
+
+
+/* ==========================================================================
+   The descent · the entry sequence
+   A corridor the visitor travels down, not objects thrown out at them.
+   Svalbard is a tunnel driven into a mountain, and the entrance already ends
+   in a link that says Descend.
+
+   Each object carries its own depth and moves its own distance. The obvious
+   construction, one stage translated forward past everything, does not work:
+   once the stage's own plane crosses the camera the browser stops drawing the
+   whole subtree, and the corridor empties halfway through. So the flight is on
+   the `translate` property of each object, which the browser applies before
+   `transform` and composites on the GPU, while `transform` holds the fixed
+   position in the corridor. The score lives in source/entry.py; the markup
+   carries the depths, and this file holds no timings but the fades.
+   ========================================================================== */
+.tun{position:fixed;inset:0;z-index:900;background:var(--vault);overflow:hidden}
+.tun[hidden]{display:none}
+/* the light at the far end */
+.tun::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:radial-gradient(46% 44% at 50% 48%,rgba(124,170,190,.2),rgba(11,26,36,0) 72%)}
+/* the dark closing in, so the corridor has walls */
+.tun::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;
+  background:radial-gradient(82% 76% at 50% 48%,rgba(11,26,36,0) 54%,rgba(11,26,36,.88) 100%)}
+
+.tun__space{position:absolute;inset:0;perspective:900px;perspective-origin:50% 48%;
+  animation:tun-wake .6s ease-out both}
+.tun__stage{position:absolute;inset:0;transform-style:preserve-3d}
+@keyframes tun-wake{from{opacity:0}to{opacity:1}}
+
+/* position in the corridor, then the flight, then the fade */
+.tun__stage>*{position:absolute;left:50%;top:50%;margin:0;
+  transform:translate3d(var(--x,0px),var(--y,0px),calc(var(--z) * -1px)) translate(-50%,-50%);
+  animation:tun-fly var(--dur-fly) cubic-bezier(.45,.03,.2,1) forwards,
+            tun-pass var(--dur) linear var(--in) both}
+@keyframes tun-fly{from{translate:0 0 0}to{translate:0 0 var(--travel)}}
+/* the ramp is a distance, not a time: an object brightens as it comes up the
+   corridor, which is the only atmospheric depth cue a flat screen has */
+@keyframes tun-pass{0%{opacity:0}70%{opacity:1}90%{opacity:1}100%{opacity:0}}
+/* a question is not atmosphere, it has to be read, so it comes up early and
+   holds. Depth is carried by the plates and the rings instead. */
+.tun__ask{animation-name:tun-fly,tun-read}
+@keyframes tun-read{0%{opacity:0}26%{opacity:.92}72%{opacity:1}92%{opacity:1}100%{opacity:0}}
+
+.tun__ring{width:1860px;height:1180px;border:1px solid rgba(232,238,242,.25);border-radius:2px}
+
+.tun__plate{width:380px}
+.tun__plate img{display:block;width:100%;height:auto;
+  border:1px solid rgba(232,238,242,.22);box-shadow:0 1.2rem 3rem rgba(0,0,0,.6)}
+.tun__plate figcaption{margin-top:.55rem;text-align:center;font-family:var(--san);
+  font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;color:#9fb4c1}
+
+.tun__ask{white-space:nowrap;font-family:var(--ser);line-height:1;color:var(--frost);
+  font-size:clamp(4.5rem,10vw,10rem);text-shadow:0 .2rem 2.4rem rgba(0,0,0,.72)}
+
+/* the door is the one object the camera never reaches, so it does not fade out */
+.tun .tun__door{width:1060px;text-align:center;padding:clamp(2rem,5vh,3.4rem) 2rem;
+  border:1px solid rgba(232,238,242,.3);border-radius:2px;
+  background:radial-gradient(70% 90% at 50% 50%,rgba(18,37,52,.85),rgba(11,26,36,.2));
+  animation:tun-fly var(--dur-fly) cubic-bezier(.45,.03,.2,1) forwards,
+            tun-arrive 1.25s var(--ease) var(--in) both}
+@keyframes tun-arrive{from{opacity:0}to{opacity:1}}
+.tun__k{margin:0 0 1.1rem;font-family:var(--san);font-size:.8rem;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--germ-lift)}
+.tun__word{margin:0;font-family:var(--ser);font-size:9rem;line-height:.95;color:var(--frost)}
+.tun__line{margin:1.3rem 0 0;font-family:var(--san);font-size:1.15rem;color:#9fb4c1}
+
+.tun__skip{position:absolute;z-index:3;right:var(--gut);bottom:clamp(1.4rem,5vh,2.6rem);
+  background:none;border:1px solid rgba(232,238,242,.3);border-radius:2px;
+  color:var(--frost);font-family:var(--san);font-size:.76rem;letter-spacing:.16em;
+  text-transform:uppercase;padding:.7rem 1.2rem;cursor:pointer;
+  transition:border-color .2s,background-color .2s}
+.tun__skip:hover,.tun__skip:focus-visible{background:rgba(232,238,242,.1);
+  border-color:rgba(232,238,242,.65)}
+
+/* the overlay lifts by fading; the page is already there underneath */
+.tun--out{animation:tun-lift .85s var(--ease) forwards;pointer-events:none}
+@keyframes tun-lift{to{opacity:0}}
+html.tun-lock,html.tun-lock body{overflow:hidden}
+
+/* no flight for anyone who has asked their system to reduce motion: the same
+   five questions, held still */
+.tun__still{display:none}
+@media (prefers-reduced-motion:reduce){
+  .tun__space{display:none}
+  .tun::after{background:none}
+  .tun__still{display:grid;align-content:center;
+    position:absolute;inset:0;z-index:3;padding:0 var(--gut);
+    text-align:center;animation:tun-wake .6s ease-out both}
+  .tun__still ol{display:grid;gap:clamp(.6rem,2.1vh,1.2rem);
+    margin:0;padding:0;list-style:none}
+  .tun__still li{font-family:var(--ser);color:var(--frost);
+    font-size:clamp(1.4rem,3.2vw,2.4rem);line-height:1.2}
+  .tun__still li:last-child{color:var(--germ-lift)}
+  .tun__still-door{margin:clamp(2rem,6vh,3.6rem) 0 0;font-family:var(--ser);
+    color:var(--frost);font-size:clamp(2.6rem,7vw,5rem);line-height:1}
+  .tun--out{animation:none;opacity:0}
+}
+
+@media (max-width:48rem){
+  .tun__ring{width:1280px;height:1000px}
+  .tun__plate{width:260px}
+  .tun__plate figcaption{font-size:.66rem}
+  .tun .tun__door{width:min(600px,90vw);padding:2rem 1.2rem}
+  .tun__word{font-size:clamp(3.2rem,15vw,5.4rem)}
+  .tun__line{font-size:1rem}
+  .tun__skip span{display:none}
+}

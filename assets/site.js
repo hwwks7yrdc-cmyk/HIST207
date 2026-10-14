@@ -240,3 +240,112 @@
     }, { passive: false });
   }
 })();
+
+/* ===================================================================== */
+/* The descent: the entry sequence on the entrance page.                  */
+/*                                                                        */
+/* It is an overlay over a page that is already fully rendered beneath,   */
+/* so nothing here is load-bearing. With scripting off the markup keeps   */
+/* its `hidden` attribute and the entrance behaves exactly as it always   */
+/* did. The flight itself is declared in CSS and starts the moment the    */
+/* element is laid out; this file only decides whether to show it, and    */
+/* when to take it away.                                                  */
+/* ===================================================================== */
+(function () {
+  "use strict";
+
+  var tun = document.getElementById("descent");
+  if (!tun) return;
+
+  var SEEN = "ds.descent.v1";
+  var HOLD = 1.5;
+  var FLY = parseFloat(tun.style.getPropertyValue("--dur-fly")) || 7;
+  var root = document.documentElement;
+  var still = window.matchMedia &&
+              window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var timer = null, running = false;
+
+  function seen() {
+    try { return window.localStorage.getItem(SEEN) === "1"; } catch (e) { return false; }
+  }
+  function remember() {
+    try { window.localStorage.setItem(SEEN, "1"); } catch (e) {}
+  }
+
+  function onKey(ev) {
+    if (ev.key === "Escape" || ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); end(); }
+  }
+  function onSkip() { end(); }
+  function onBackdrop(ev) { if (ev.target === tun) end(); }
+
+  function end() {
+    if (!running) return;
+    running = false;
+    window.clearTimeout(timer);
+    tun.classList.add("tun--out");
+    root.classList.remove("tun-lock");
+    document.removeEventListener("keydown", onKey);
+    tun.removeEventListener("click", onBackdrop);
+    var skip = tun.querySelector(".tun__skip");
+    if (skip) skip.removeEventListener("click", onSkip);
+    window.setTimeout(function () {
+      tun.hidden = true;
+      tun.classList.remove("tun--out");
+    }, 900);
+    remember();
+    if (window.location.hash === "#descend" && window.history.replaceState) {
+      window.history.replaceState(null, "", window.location.pathname);
+    }
+  }
+
+  function play() {
+    if (running) return;
+    running = true;
+    /* hiding and showing restarts the CSS animations, which is what makes a
+       replay possible without reloading the page */
+    tun.hidden = true;
+    void tun.offsetWidth;
+    root.classList.add("tun-lock");
+    window.scrollTo(0, 0);
+    tun.hidden = false;
+    document.addEventListener("keydown", onKey);
+    tun.addEventListener("click", onBackdrop);
+    var skip = tun.querySelector(".tun__skip");
+    if (skip) skip.addEventListener("click", onSkip);
+    /* No autofocus: a focus ring on the skip button would be the loudest
+       thing on screen for the whole sequence. Escape is handled on the
+       document, and Tab reaches the button first. */
+    timer = window.setTimeout(end, (still ? 3.4 : FLY + HOLD) * 1000);
+  }
+
+  /* Wait for the plates, but never for long: a slow connection must not be
+     able to hold up the entrance. Whatever has arrived at the cap is what
+     flies. */
+  function whenReady(run) {
+    var imgs = [].slice.call(tun.querySelectorAll("img"));
+    var left = imgs.length;
+    var went = false;
+    function go() { if (!went) { went = true; run(); } }
+    if (!left || still) { go(); return; }
+    imgs.forEach(function (im) {
+      if (im.complete) { if (--left === 0) go(); return; }
+      im.addEventListener("load", function () { if (--left === 0) go(); });
+      im.addEventListener("error", function () { if (--left === 0) go(); });
+    });
+    window.setTimeout(go, 1400);
+  }
+
+  /* A replay asked for from inside the page changes only the fragment, so the
+     document is never reloaded and nothing below would ever run again. */
+  window.addEventListener("hashchange", function () {
+    if (window.location.hash === "#descend") whenReady(play);
+  });
+
+  /* Otherwise: only on a clean first arrival. Someone who has seen it, or who
+     has deep-linked to a section of this page, knows where they are going and
+     should not be held up. */
+  var asked = window.location.hash === "#descend";
+  if (!asked && (seen() || (window.location.hash && window.location.hash !== "#"))) return;
+  whenReady(play);
+})();
