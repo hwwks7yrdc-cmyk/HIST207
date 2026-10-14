@@ -190,8 +190,10 @@ blockquote.pull footer{font-family:var(--san);font-size:.72rem;letter-spacing:.0
 .work__fig--held figcaption{position:static;background:none;text-align:left;
   max-width:min(100%,62rem);margin:1.1rem auto 0;padding:0 0 clamp(2rem,5vw,3.2rem);
   color:#8ba0ad}
-.work__fig figcaption{font-size:.8rem;line-height:1.5;color:var(--ink-2);
-  padding:.85rem var(--gut) 0;max-width:62rem}
+/* the credit sits on the dark ground of .work__fig, so it takes the light
+   caption colour, not the body ink, which measured 2.5:1 against the vault */
+.work__fig figcaption{font-size:.8rem;line-height:1.5;color:#8ba0ad;
+  padding:.85rem var(--gut) 1.1rem;max-width:62rem}
 .work__body{padding:clamp(2.4rem,6vh,4rem) 0 clamp(3.4rem,9vh,5.5rem)}
 .work__head{display:flex;justify-content:space-between;gap:1rem;align-items:baseline;
   border-bottom:1px solid var(--rule);padding-bottom:.7rem;margin-bottom:1.6rem}
@@ -288,6 +290,10 @@ blockquote.pull footer{font-family:var(--san);font-size:.72rem;letter-spacing:.0
 .assets figure{margin:0}
 .assets img{border:1px solid var(--rule)}
 .assets figcaption{font-family:var(--san);font-size:.74rem;color:var(--ink-2);margin-top:.6rem}
+/* the identity sits in a dark band, so its captions take the light caption
+   colour; the body ink measured 2.5:1 there */
+.dark .assets figcaption,.dark .assets figcaption a{color:#8ba0ad}
+.dark .assets figcaption a{text-decoration-color:rgba(139,160,173,.5)}
 
 .swatches{display:flex;flex-wrap:wrap;gap:.9rem;margin:0 0 1.4rem;padding:0;list-style:none}
 .swatches li{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;color:var(--ink-2)}
