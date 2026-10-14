@@ -75,17 +75,21 @@ colophon.html     credits, image rights, visual identity, references
 assets/style.css  the whole design system, one file
 assets/site.js    three behaviours: the label reveal, the depth marker, a page flag
 assets/fonts/     Lora and Poppins, subsetted to woff2, 68 KB in total
-assets/img/       work images and the designed placeholders
+assets/img/       work images, the documentation galleries, the one designed
+                  placeholder, and the small copies: tun-*.jpg for the descent,
+                  tile-*.jpg for the nine preview tiles
 assets/design/    the poster and the promotional image
 source/           sitedata.py and build_site.py, which generate the seven pages;
                   artists.py, the nine artist statements; diagrams.py, the nine drawn
-                  figures; extras.py, the nine curators' notes and the slots for
-                  further images; assets.py and fonts.py, which made the images and
-                  the fonts
+                  figures; extras.py, the nine curators' notes and the further images;
+                  entry.py, the score of the entry sequence; and the scripts that made
+                  the files: assets.py, fonts.py, media.py, entryplates.py
 .nojekyll         keep
 ```
 
-Total weight is about 1.4 MB, and a first visit loads roughly 400 KB.
+The whole site is about 4.9 MB. Opening the entrance loads roughly 1.2 MB of
+that, most of it the nine photographs in the preview wall, which arrive behind
+the entry sequence while it is playing.
 
 ## Decisions worth knowing before you edit
 
@@ -114,7 +118,34 @@ as a record of how `assets/img/` and `assets/fonts/` were produced.
 are shown open by a `<noscript>` rule, and every page stays fully readable. The
 register loses its filters but still lists all nine rows, and the wall in Room II
 still scrolls by swipe or trackpad because that is native browser behaviour, not
-script. Only the withdrawal slip needs script to do its job.
+script. The entry sequence ships with `hidden` on it and simply never appears.
+Only the withdrawal slip needs script to do its job.
+
+**The entry sequence is a corridor, and it is scored in `source/entry.py`.**
+The entrance opens on a descent: nine accessions pass to either side, five
+questions come straight at the camera, and the corridor ends at a door that says
+welcome. Four of the five questions are the label fields printed on every work,
+which is what keeps the sequence part of the argument rather than decoration.
+
+Things worth knowing before changing it:
+
+- The score is written in *seconds*, and depth is derived from it. The camera
+  decelerates, so evenly spaced objects would arrive in a rush and then leave a
+  hole. Edit `SCORE`, not the depths.
+- Visibility is measured in *distance*, not seconds, for the same reason. An
+  object that is given a fixed number of seconds late in the flight winks on at
+  the size it winks off at and never appears to approach. See `VISIBLE`.
+- The flight is on each object's own `translate`, never on one container. Moving
+  a single stage forward is the obvious construction and it fails: once the
+  stage's own plane crosses the camera the browser stops drawing the entire
+  subtree, and the corridor empties halfway through.
+- Lateral offsets are written for a 1440 by 900 window and converted to
+  window-relative lengths. In fixed pixels nothing is ever visible on a phone.
+- It plays once per visitor, keyed `ds.descent.v1` in `localStorage`, and never
+  on a deep link into the page. `index.html#descend` replays it, which is what
+  makes it usable in a live presentation; the colophon carries that link.
+- Under `prefers-reduced-motion: reduce` there is no flight at all. The same five
+  questions and the same door are held still for three seconds.
 
 **The slip stores nothing and must keep storing nothing.** Everything typed into
 `withdrawal.html` stays in the visitor's own browser. There is no endpoint, no
