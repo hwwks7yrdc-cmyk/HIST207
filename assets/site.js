@@ -372,3 +372,119 @@
 
   Array.prototype.forEach.call(bands, function (el) { io.observe(el); });
 })();
+
+/* ===================================================================== */
+/* The work, moving.                                                      */
+/*                                                                        */
+/* Every video panel is written into the page as a link to the source,    */
+/* over a still frame the exhibition holds itself. Nothing is requested   */
+/* from anybody until the visitor presses play, at which point the link   */
+/* is replaced in place by a player: a <video> for a file the project     */
+/* serves itself, an iframe for a platform. With scripting off the panel  */
+/* stays what the markup says it is, a link, and still works.             */
+/* ===================================================================== */
+(function () {
+  var frames = document.querySelectorAll("a.vidp__frame[data-video]");
+  if (!frames.length) return;
+
+  function player(a) {
+    var kind = a.getAttribute("data-video");
+    var src = a.getAttribute("data-src");
+    var title = a.getAttribute("data-title") || "";
+    var poster = a.querySelector(".vidp__poster");
+    var el;
+
+    if (kind === "file") {
+      el = document.createElement("video");
+      el.setAttribute("controls", "");
+      el.setAttribute("playsinline", "");
+      el.setAttribute("preload", "auto");
+      if (poster) el.setAttribute("poster", poster.getAttribute("src"));
+      el.setAttribute("src", src);
+      el.setAttribute("title", title);
+      el.autoplay = true;
+    } else {
+      el = document.createElement("iframe");
+      el.setAttribute("title", title);
+      el.setAttribute("allow",
+        "autoplay; fullscreen; picture-in-picture; encrypted-media");
+      el.setAttribute("allowfullscreen", "");
+      el.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
+      el.setAttribute("frameborder", "0");
+      el.setAttribute("src", kind === "vimeo"
+        ? "https://player.vimeo.com/video/" + src + "?autoplay=1&dnt=1&title=0&byline=0"
+        : "https://www.youtube-nocookie.com/embed/" + src +
+          "?autoplay=1&rel=0&modestbranding=1&playsinline=1");
+    }
+    return el;
+  }
+
+  Array.prototype.forEach.call(frames, function (a) {
+    a.addEventListener("click", function (ev) {
+      /* let a modified click open the source the way the visitor asked */
+      if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey || ev.button) return;
+      ev.preventDefault();
+      var el = player(a);
+      a.parentNode.replaceChild(el, a);
+      if (el.focus) { try { el.focus({ preventScroll: true }); } catch (e) { el.focus(); } }
+    });
+  });
+})();
+
+/* ===================================================================== */
+/* Key passages.                                                          */
+/*                                                                        */
+/* The mark is drawn under the words rather than printed behind them, so  */
+/* it has to be drawn at some moment. It is drawn when the paragraph       */
+/* reaches the reader, once, and then left alone. Without scripting the   */
+/* stylesheet shows every mark at full width from the start.               */
+/* ===================================================================== */
+(function () {
+  var keys = document.querySelectorAll(".key");
+  if (!keys.length) return;
+  if (!("IntersectionObserver" in window)) {
+    Array.prototype.forEach.call(keys, function (k) { k.classList.add("key--on"); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      e.target.classList.add("key--on");
+      io.unobserve(e.target);
+    });
+  }, { rootMargin: "0px 0px -12% 0px", threshold: 0.3 });
+  Array.prototype.forEach.call(keys, function (k) { io.observe(k); });
+})();
+
+/* ===================================================================== */
+/* Running growth.                                                        */
+/*                                                                        */
+/* The seed drawings run only while they are on screen. They are          */
+/* decorative and infinite, and an animation nobody is looking at is      */
+/* simply a cost, so the class that starts them is added on entry and     */
+/* taken away on exit.                                                    */
+/* ===================================================================== */
+(function () {
+  var sows = document.querySelectorAll(".sow");
+  if (!sows.length) return;
+
+  /* the stem is dashed to its own length, which only the browser knows */
+  Array.prototype.forEach.call(sows, function (s) {
+    Array.prototype.forEach.call(s.querySelectorAll(".sow__stem"), function (p) {
+      var len;
+      try { len = p.getTotalLength(); } catch (e) { len = 60; }
+      p.style.setProperty("--len", Math.ceil(len));
+    });
+  });
+
+  if (!("IntersectionObserver" in window)) {
+    Array.prototype.forEach.call(sows, function (s) { s.classList.add("sow--run"); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      e.target.classList.toggle("sow--run", e.isIntersecting);
+    });
+  }, { rootMargin: "80px 0px 80px 0px" });
+  Array.prototype.forEach.call(sows, function (s) { io.observe(s); });
+})();

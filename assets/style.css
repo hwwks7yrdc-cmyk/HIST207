@@ -807,3 +807,140 @@ html.tun-lock,html.tun-lock body{overflow:hidden}
   .tun__line{font-size:1rem}
   .tun__skip span{display:none}
 }
+
+/* ==========================================================================
+   The work, moving
+   One still frame, credited. The film itself is never copied and never
+   requested until the visitor presses play.
+   ========================================================================== */
+.vidp__note{font-family:var(--san);font-size:.78rem;line-height:1.6;
+  color:#4a687a;max-width:46rem;margin:0 0 1.4rem}
+.vidp__set{display:grid;gap:clamp(1.6rem,4vw,2.4rem)}
+@media (min-width:62rem){
+  .vidp__set:has(.vidp + .vidp){grid-template-columns:repeat(2,1fr)}
+}
+.vidp{margin:0;max-width:52rem}
+
+.vidp__frame{position:relative;display:block;aspect-ratio:16/9;overflow:hidden;
+  background:var(--vault);border:1px solid var(--rule);
+  text-decoration:none;color:var(--frost);isolation:isolate}
+.vidp__poster{width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform .6s var(--ease),filter .4s var(--ease);
+  filter:saturate(.92) brightness(.94)}
+.vidp__frame::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(11,26,36,0) 45%,rgba(11,26,36,.55));
+  pointer-events:none}
+.vidp__frame:hover .vidp__poster,
+.vidp__frame:focus-visible .vidp__poster{transform:scale(1.03);
+  filter:saturate(1) brightness(1)}
+
+.vidp__btn{position:absolute;left:50%;top:50%;z-index:2;
+  transform:translate(-50%,-50%);width:clamp(56px,9vw,74px);height:clamp(56px,9vw,74px);
+  display:grid;place-items:center;color:var(--frost);
+  border-radius:50%;background:rgba(11,26,36,.42);
+  backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);
+  transition:background .3s var(--ease),color .3s var(--ease),transform .3s var(--ease)}
+.vidp__btn svg{width:100%;height:100%}
+.vidp__frame:hover .vidp__btn,
+.vidp__frame:focus-visible .vidp__btn{background:var(--germ);color:#fff;
+  transform:translate(-50%,-50%) scale(1.06)}
+.vidp__dur{position:absolute;right:.7rem;bottom:.6rem;z-index:2;
+  font-family:var(--san);font-size:.68rem;letter-spacing:.08em;
+  color:var(--frost);background:rgba(11,26,36,.6);padding:.2rem .45rem}
+.vidp__sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+
+/* the player, once it has been asked for */
+.vidp__frame--live{cursor:default}
+.vidp__set video,.vidp__set iframe{display:block;width:100%;aspect-ratio:16/9;
+  border:1px solid var(--rule);background:#000}
+
+.vidp__c{margin:.95rem 0 0;display:block}
+.vidp__c b{display:block;font-family:var(--san);font-size:.86rem;font-weight:500;
+  color:var(--ink);letter-spacing:.01em;margin-bottom:.4rem}
+.vidp__what{display:block;font-size:.92rem;line-height:1.6;color:var(--ink-2)}
+.vidp__by{display:block;margin-top:.5rem;font-family:var(--san);font-size:.72rem;
+  letter-spacing:.04em;color:#4a687a}
+.vidp__by a{color:var(--germ)}
+
+/* ==========================================================================
+   Key passages
+   A rule drawn under the words rather than a block printed behind them, so
+   a marked sentence still reads as part of the paragraph. It grows across
+   the phrase when the paragraph arrives and is then left alone. The heavier
+   mark also lifts the colour of the words, which is the only emphasis in
+   the exhibition that changes the text itself, and it is used once per work.
+   ========================================================================== */
+.key{
+  background-image:linear-gradient(currentColor,currentColor);
+  background-repeat:no-repeat;
+  background-position:0 1.27em;
+  background-size:0 .085em;
+  color:#2f6b3f;
+  transition:background-size .9s var(--ease);
+  padding-bottom:.22em;
+}
+.key.key--on,.no-js .key{background-size:100% .085em}
+
+.key--hard{
+  background-position:0 1.25em;
+  color:#1d5436;
+  font-weight:500;
+}
+.key--hard.key--on,.no-js .key--hard{background-size:100% .18em}
+
+.dark .key{color:var(--germ-lift)}
+.dark .key--hard{color:#a9dcb6}
+
+@media (prefers-reduced-motion:reduce){
+  .key{transition:none;background-size:100% .085em}
+  .key--hard{background-size:100% .18em}
+}
+
+/* ==========================================================================
+   Running growth
+   Seeds that become plants, at the seams between sections. Decorative, so
+   hidden from the reader of a screen reader and stopped under reduced motion.
+   ========================================================================== */
+.sow{display:block;width:100%;height:auto;overflow:visible;color:var(--germ)}
+.sow__soil{stroke:currentColor;stroke-width:1.1;opacity:.3}
+.sow__seed{fill:currentColor}
+.sow__stem{fill:none;stroke:currentColor;stroke-width:2.1;stroke-linecap:round;
+  stroke-dasharray:var(--len);stroke-dashoffset:var(--len)}
+.sow__leaf{fill:currentColor;transform-box:fill-box;transform-origin:0% 50%;
+  transform:scale(0)}
+
+.sow--run .sow__stem{animation:sow-rise var(--d,3.4s) var(--ease) var(--t,0s) infinite both}
+.sow--run .sow__leaf{animation:sow-leaf 1s var(--ease) calc(var(--t,0s) + var(--l,.9s)) infinite both}
+.sow--run .sow__seed{animation:sow-seed var(--d,3.4s) var(--ease) var(--t,0s) infinite both}
+
+@keyframes sow-rise{
+  0%{stroke-dashoffset:var(--len)}
+  42%{stroke-dashoffset:0}
+  82%{stroke-dashoffset:0;opacity:1}
+  100%{stroke-dashoffset:0;opacity:0}
+}
+@keyframes sow-leaf{
+  0%{transform:scale(0) rotate(-8deg);opacity:0}
+  60%{transform:scale(1.06) rotate(2deg);opacity:1}
+  100%{transform:scale(1) rotate(0);opacity:1}
+}
+@keyframes sow-seed{
+  0%{transform:translateY(-4px);opacity:0}
+  8%{transform:translateY(0);opacity:1}
+  82%{opacity:1}
+  100%{opacity:0}
+}
+
+.sow__band{display:flex;align-items:flex-end;justify-content:center;
+  gap:clamp(1.4rem,5vw,3.2rem);padding:0 var(--gut);
+  margin:clamp(2.4rem,6vw,4rem) auto 0;max-width:72rem}
+.sow__band--soft{background:var(--soft);max-width:none;
+  margin:0;padding-top:clamp(2.2rem,5vw,3.4rem)}
+.sow__band .sow{flex:0 0 auto;width:clamp(52px,8vw,78px)}
+.dark .sow{color:var(--germ-lift);opacity:.75}
+
+@media (prefers-reduced-motion:reduce){
+  .sow--run .sow__stem,.sow--run .sow__leaf,.sow--run .sow__seed{animation:none}
+  .sow--run .sow__stem{stroke-dashoffset:0}
+  .sow--run .sow__leaf{transform:scale(1)}
+}
