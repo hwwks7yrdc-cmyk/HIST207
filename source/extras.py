@@ -301,6 +301,87 @@ LISTEN = {
 }
 
 
+# ---------------------------------------------------------------- video
+# Moving image for the works that have any published openly. The position is
+# the one the exhibition already takes on sound: none of this is ours, so
+# none of it is copied. Each panel holds one still frame, credited, and the
+# film itself is streamed from the server that published it, at the moment
+# the visitor presses play and not before. Until then the page makes no
+# request to anybody.
+#
+#   kind   "file"    a video file the project itself serves
+#          "youtube" | "vimeo"   a platform embed, loaded on click
+#   src    what the player loads
+#   at     where the recording lives, for the caption and for anyone whose
+#          network will not reach the platform
+VIDEO = {
+"paterson": [{
+  "kind": "file",
+  "src": "https://futurelibrary.no/assets/video/future-library.mp4",
+  "poster": "vid-paterson-film.jpg", "w": 960, "h": 540, "dur": "4:58",
+  "title": "Future Library, the project’s own film",
+  "what": "The forest outside Oslo, the printing of the paper, the room in the "
+          "Deichman library where the hundred manuscripts will wait.",
+  "by": "Future Library",
+  "at": "https://www.futurelibrary.no/",
+  "atname": "futurelibrary.no",
+}, {
+  "kind": "file",
+  "src": "https://futurelibrary.no/assets/video/margareth-handover.mp4",
+  "poster": "vid-paterson-hand.jpg", "w": 960, "h": 540, "dur": "6:43",
+  "title": "Margaret Atwood hands over the first manuscript, 2015",
+  "what": "The deposit itself. A walk into the trees, a text nobody alive will "
+          "read, and a ceremony invented to carry it ninety-nine years.",
+  "by": "Future Library",
+  "at": "https://www.futurelibrary.no/",
+  "atname": "futurelibrary.no",
+}],
+"sonjasdotter": [{
+  "kind": "vimeo", "src": "953564043",
+  "poster": "vid-sonjasdotter.jpg", "w": 1200, "h": 675, "dur": "1:32",
+  "title": "Cultivating Abundance, excerpt",
+  "what": "The distributor’s own excerpt from the film in this room, on "
+          "grain varieties bred out of European agriculture and brought back "
+          "into cultivation.",
+  "by": "Filmform, the Art Film & Video Archive, Stockholm",
+  "at": "https://filmform.com/works/5840-cultivating-abundance",
+  "atname": "filmform.com",
+}],
+"sansour": [{
+  "kind": "youtube", "src": "BESOI0LZ6UY",
+  "poster": "vid-sansour.jpg", "w": 1200, "h": 675, "dur": None,
+  "title": "Seed Stories: Vivien Sansour",
+  "what": "Sansour on why she began collecting, and on what a seed carries "
+          "besides its genetics.",
+  "by": "A Growing Culture",
+  "at": "https://www.youtube.com/watch?v=BESOI0LZ6UY",
+  "atname": "YouTube",
+}],
+"okoyomon": [{
+  "kind": "youtube", "src": "XwCWzFKVOYo",
+  "poster": "vid-okoyomon.jpg", "w": 1200, "h": 675, "dur": None,
+  "title": "Precious Okoyomon in conversation, 2025",
+  "what": "On the practice rather than on this work. No moving record of "
+          "Earthseed has been published, and this is the nearest the "
+          "exhibition can bring you to the artist’s own voice.",
+  "by": "LUMA Arles",
+  "at": "https://luma.org/en/arles/video/entretien-avec-precious-okoyomon-2025",
+  "atname": "luma.org",
+}],
+"kiwanga": [{
+  "kind": "youtube", "src": "m_eXzRln4Wk",
+  "poster": "vid-kiwanga.jpg", "w": 1200, "h": 675, "dur": None,
+  "title": "Kapwani Kiwanga on Flowers for Africa",
+  "what": "Filmed for the Marcel Duchamp Prize in 2020. Kiwanga on the "
+          "photographs she works from, and on rebuilding a bouquet nobody "
+          "kept.",
+  "by": "Centre culturel canadien, Paris",
+  "at": "https://www.youtube.com/watch?v=m_eXzRln4Wk",
+  "atname": "YouTube",
+}],
+}
+
+
 def script(slug):
     return " ".join(AUDIO[slug].split())
 

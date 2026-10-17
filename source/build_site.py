@@ -4,6 +4,7 @@ import os, html, shutil
 from PIL import Image
 import sitedata as S
 import diagrams as DG
+import keys as KY
 import extras as EX
 import artists as AR
 import entry as EN
@@ -249,7 +250,9 @@ def build_index():
       <span class="room-card__go">Enter &rarr;</span>
     </a>"""
 
-    statement = "".join(f"<p>{t}</p>" for t in S.STATEMENT)
+    statement = "".join(
+        f"<p>{keyed(t, KY.INDEX_KEYS.get(i), escape=False)}</p>"
+        for i, t in enumerate(S.STATEMENT))
     facts = "".join(f"<div><dt>{html.escape(k)}</dt><dd>{html.escape(v)}</dd></div>" for k, v in S.VAULT_FACTS)
     q1, c1 = S.TSING[0]
     q2, c2 = S.TSING[1]
@@ -298,6 +301,8 @@ def build_index():
     </div>
   </div>
 </section>
+
+{sow_band(7, "4.2s")}
 
 {preview_wall()}
 
@@ -420,7 +425,9 @@ def work_html(w, r):
                  f'<p>&ldquo;{html.escape(qt)}&rdquo;</p>'
                  f'<footer>{html.escape(qa)}</footer></blockquote>')
 
-    desc = "".join(f"<p>{html.escape(d) if '<' not in d else d}</p>" for d in w["desc"])
+    km = KY.WORK_KEYS.get(w["slug"], {})
+    desc = "".join(f"<p>{keyed(d, km.get('desc', {}).get(i))}</p>"
+                   for i, d in enumerate(w["desc"]))
     link = ""
 
     iw, ih = imgsize(w["img"])
@@ -445,7 +452,7 @@ def work_html(w, r):
           <p class="work__meta"><span>{html.escape(w['born'])}</span><span>{html.escape(w['medium'])}</span></p>
           {desc}
           {quote}
-          <div class="work__note"><b>Why this room</b>{html.escape(w['note'])}</div>
+          <div class="work__note"><b>Why this room</b>{keyed(w['note'], km.get('note'))}</div>
           {link}
         </div>
         <aside>
@@ -495,7 +502,7 @@ def build_room(i):
     <p class="threshold__n">Room {r['n']}</p>
     <h1>{r['name']}</h1>
     <p class="threshold__line">{html.escape(r['line'])}</p>
-    <p class="threshold__text">{html.escape(r['text'])}</p>
+    <p class="threshold__text">{keyed(r['text'], KY.ROOM_KEYS.get(r['n']))}</p>
     <ul class="threshold__list">{listing}</ul>
   </div>
 </section>
@@ -503,6 +510,8 @@ def build_room(i):
 {wall(r, works) if r['n'] == "II" else ""}
 
 {''.join(work_html(w, r) for w in works)}
+
+{sow_band(5, soft=True)}
 
 {onward}
 </main>"""
@@ -556,7 +565,8 @@ def build_colophon():
         None of them invents a number.</p>
         <p class="muted">The site is hand-written HTML, CSS and JavaScript with no framework and no build
         step, hosted on GitHub Pages. Type is self-hosted, so the pages load without a single third-party
-        request. Total weight is under two megabytes.</p>
+        request, and the video panels keep that true by loading nothing until they are asked to. Total
+        weight is under two megabytes.</p>
         <p class="muted">Four things on the site ask something of the visitor rather than only showing
         them something. The <a href="index.html#statement">plan</a> on the entrance lets anyone enter at
         a particular work instead of walking the rooms in order. Every label keeps two of its four fields
@@ -638,13 +648,23 @@ def build_colophon():
     <p class="muted narrow">Six of the nine pages link a recording of the artist speaking about the work:
     a public radio programme, a symposium a gallery recorded and published itself, and three podcasts. None
     of it was made by us and none of it is copied here. Each one is named, dated and linked, and plays on the
-    site that published it, which is also why no player is embedded: this exhibition makes no third-party
-    request of any kind. Katie Paterson’s page carries a sentence quoted from NPR’s own published
+    site that published it. No player is embedded for them, and the page asks nobody for anything until the
+    visitor chooses to go there. Katie Paterson’s page carries a sentence quoted from NPR’s own published
     transcript; the other recordings have no transcript, so they are linked and described rather than quoted.
     Three works carry no recording. Åsa Sonjasdotter’s film has its own sound, and the excerpt
     Filmform publishes is already linked on her page; for Maria Thereza Alves and Futurefarmers every
     published interview we could find is in print. We would rather leave those three empty than fill them
     with a recording about something else.</p>
+    <p class="muted narrow">Five of the nine works carry video on the page itself. Nothing of anybody’s
+    film is copied into this site. Each panel holds one still frame, credited the way the photographs are
+    credited, and the film is streamed from the server that published it at the moment the visitor presses
+    play. Until then the exhibition makes no third-party request of any kind, which was the rule the site
+    was built on and remains the rule. Two of the panels play from the Future Library project’s own
+    files. The other three play on Vimeo and YouTube, which some networks do not reach, so every panel also
+    carries the link to its source and works as a link with scripting switched off. Four works carry no
+    video, because no moving record of them has been published openly. Precious Okoyomon’s panel is an
+    interview about the practice rather than about <cite>Earthseed</cite>, and says so on the page.</p>
+
     <p class="muted narrow">The photograph at the entrance is of the Svalbard Global Seed Vault on
     Spitsbergen, by Bjoertvedt, published on Wikimedia Commons under a Creative Commons
     Attribution-ShareAlike 3.0 licence. The mirrored work above the vault door is
@@ -790,6 +810,135 @@ def has_asset(rel):
     return os.path.isfile(os.path.join(OUT, "assets", rel))
 
 
+# ---------------------------------------------------------------- key passages
+MISSED = []
+
+
+def keyed(text, marks, escape=True):
+    """Draw the curators' mark under the phrases named in keys.py.
+
+    The phrase has to appear in the text exactly, and the first occurrence
+    is the one marked. A phrase that no longer matches is collected rather
+    than silently dropped, and the build prints the list, so an edit to a
+    sentence cannot leave a mark pointing at nothing.
+    """
+    out = html.escape(text) if escape and "<" not in text else text
+    if not marks:
+        return out
+    for cls, phrases in (("key key--hard", marks.get("hard", [])),
+                         ("key", marks.get("soft", []))):
+        for p in phrases:
+            e = html.escape(p) if escape and "<" not in text else p
+            if e in out:
+                out = out.replace(e, f'<span class="{cls}">{e}</span>', 1)
+            else:
+                MISSED.append(p[:60])
+    return out
+
+
+# ---------------------------------------------------------------- growth
+def sow(variant=0, delay="0s", dur="3.4s"):
+    """A seed that becomes a plant, drawn once and run in place.
+
+    Decorative, and announced as such. Three variants so that a row of them
+    is a row of individuals rather than a repeat, and each carries its own
+    delay, so the row grows across rather than all at once.
+    """
+    stems = [
+        ("M30 76 C30 62 25 54 27 42 C29 30 31 24 30 12", 30, 12),
+        ("M30 76 C30 64 34 56 32 45 C30 34 28 27 30 16", 30, 16),
+        ("M30 76 C30 63 27 57 29 47 C31 37 33 28 31 18", 31, 18),
+    ]
+    leaves = [
+        [(27, 48, -34, 1), (29, 33, 26, -1)],
+        [(32, 51, 30, -1), (30, 36, -28, 1)],
+        [(28, 52, -30, 1), (31, 38, 24, -1), (31, 26, -20, 1)],
+    ]
+    d, _, _ = stems[variant % 3]
+    lv = ""
+    for i, (x, y, rot, dirn) in enumerate(leaves[variant % 3]):
+        # the placement lives on a wrapper, because the leaf's own transform
+        # belongs to the animation and a CSS transform would overwrite it
+        lv += (f'<g transform="translate({x} {y}) rotate({rot}) scale({dirn} 1)">'
+               f'<path class="sow__leaf" style="--l:{.8 + i * .35:.2f}s" '
+               f'd="M0 0 C7 -5 15 -4 19 0 C15 4 7 5 0 0 Z"/></g>')
+    return (f'<svg class="sow" viewBox="0 0 60 84" aria-hidden="true" '
+            f'focusable="false" style="--t:{delay};--d:{dur}">'
+            f'<line class="sow__soil" x1="8" y1="78" x2="52" y2="78"/>'
+            f'<ellipse class="sow__seed" cx="30" cy="75" rx="4.4" ry="3.2"/>'
+            f'<path class="sow__stem" d="{d}"/>{lv}</svg>')
+
+
+def sow_band(n=5, dur="3.6s", soft=False):
+    """A row of them, growing one after another along the seam.
+
+    `soft` carries the dossier's own grey up to the edge of the dark panel
+    below, so the row reads as the end of that band rather than as a gap.
+    """
+    cls = "sow__band sow__band--soft" if soft else "sow__band"
+    return (f'<div class="{cls}" aria-hidden="true">'
+            + "".join(sow(i, f"{i * .42:.2f}s", dur) for i in range(n))
+            + "</div>")
+
+
+def videos(w):
+    """Moving image, where any has been published openly.
+
+    Nothing here is copied. Each panel is one still frame, credited the way
+    the photographs are credited, and the film is streamed from the server
+    that published it at the moment the visitor presses play. Before that
+    the page has asked nobody for anything. Without JavaScript the frame is
+    simply a link to the source, which is what it already is in the markup.
+    """
+    vids = EX.VIDEO.get(w["slug"], [])
+    if not vids:
+        return ""
+
+    panels = ""
+    for v in vids:
+        dur = (f'<span class="vidp__dur">{v["dur"]}</span>') if v["dur"] else ""
+        where = {"file": "mp4", "youtube": "youtube", "vimeo": "vimeo"}[v["kind"]]
+        panels += f"""<figure class="vidp">
+        <a class="vidp__frame" href="{v['at']}" rel="noopener"
+           data-video="{v['kind']}" data-src="{v['src']}"
+           data-title="{html.escape(v['title'], quote=True)}"
+           data-where="{where}">
+          <img class="vidp__poster" src="assets/img/{v['poster']}"
+               alt="A frame from {html.escape(v['title'])}"
+               width="{v['w']}" height="{v['h']}" loading="lazy" decoding="async">
+          <span class="vidp__btn" aria-hidden="true">
+            <svg viewBox="0 0 64 64" width="64" height="64">
+              <circle cx="32" cy="32" r="30" fill="none" stroke="currentColor"
+                      stroke-width="2"/>
+              <path d="M25 20 L47 32 L25 44 Z" fill="currentColor"/>
+            </svg>
+          </span>
+          {dur}
+          <span class="vidp__sr">Play {html.escape(v['title'])}</span>
+        </a>
+        <figcaption class="vidp__c">
+          <b>{html.escape(v['title'])}</b>
+          <span class="vidp__what">{html.escape(v['what'])}</span>
+          <span class="vidp__by">{html.escape(v['by'])} &middot;
+            <a href="{v['at']}" rel="noopener">at {html.escape(v['atname'])}</a></span>
+        </figcaption>
+      </figure>"""
+
+    off = ""
+    if any(v["kind"] != "file" for v in vids):
+        off = ('<p class="vidp__note">Some of these play on YouTube or Vimeo, '
+               'which a few networks do not reach. Where a player stays empty, '
+               'the link under the panel opens the same recording at its source.</p>')
+
+    n = len(vids)
+    return f"""<section class="dos__item">
+      <p class="dos__k">The work, moving
+        <span>{'one recording' if n == 1 else f'{n} recordings'}, nothing loaded until you press play</span></p>
+      {off}
+      <div class="vidp__set">{panels}</div>
+    </section>"""
+
+
 def dossier(w):
     """What the exhibition holds on this work beyond the opening photograph.
     Documentation of the work comes first. The drawn figure comes last and is
@@ -811,6 +960,9 @@ def dossier(w):
       <p class="dos__k">More of the work <span>{len(extra) + 1} images in total</span></p>
       <div class="gal">{figs}</div>
     </section>""")
+
+    # 1b. moving image, where any has been published openly
+    parts.append(videos(w))
 
     # 2. the artist: practice, and their own words where a source could be verified
     q = ""
@@ -1171,3 +1323,7 @@ if __name__ == "__main__":
     open(os.path.join(OUT, "assets", "favicon.svg"), "w", encoding="utf-8").write(FAVICON)
     open(os.path.join(OUT, ".nojekyll"), "w").write("")
     print("pages built:", sorted(f for f in os.listdir(OUT) if f.endswith(".html")))
+    if MISSED:
+        raise SystemExit("key passages that no longer match their text:\n  "
+                         + "\n  ".join(MISSED))
+    print("key passages: all matched")
